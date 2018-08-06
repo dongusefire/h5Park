@@ -72,7 +72,7 @@ var issue = {
 				}else if(res.code==509){
 					this_.getCarSpace();
 				}else if(res.code!=502 && res.code!=503){
-					mui.alert(res.msg,'系统提示','确定',null);
+					mui.alert(res.msg,app.name+'提示','确定',null);
 				};
 			}
 		})
@@ -149,11 +149,11 @@ var issue = {
 					var diff_now = _this.getTimeDiff(nowDate,date1,'day');
 					console.log(diff_now);
 					if(diff<1){
-						mui.alert('结束日期必须大于起始日期，请重新选择','系统提示','确定',null);
+						mui.alert('结束日期必须大于起始日期，请重新选择',app.name+'提示','确定',null);
 						return false;
 					}
 					if(diff_now<0){
-						mui.alert('开始日期必须大于当前日期，请重新选择','系统提示','确定',null);
+						mui.alert('开始日期必须大于当前日期，请重新选择',app.name+'提示','确定',null);
 						return false;
 					}
 				});
@@ -180,7 +180,7 @@ var issue = {
 					date2 = _self.innerText;
 					var diff = _this.getTimeDiff(date1,date2,'day');
 					if(diff<0){
-						mui.alert('结束日期必须大于起始日期，请重新选择','系统提示','确定',null);
+						mui.alert('结束日期必须大于起始日期，请重新选择',app.name+'提示','确定',null);
 						return false;
 					}
 				});
@@ -263,27 +263,27 @@ var issue = {
 			var dataStartDate = data_start_date+' '+data_start_time;
 			dataStartDate = new Date(dataStartDate.replace(/-/g,"/"));
 			if(data_start_date=='选择开始日期'||data_end_date=='选择结束日期'){
-				mui.alert('请选择预定起始与结束日期','系统提示','确定',null);
+				mui.alert('请选择预定起始与结束日期',app.name+'提示','确定',null);
 				return false;
 			};
 			if(data_start_time=='选择开始时间'||data_end_time=='选择结束时间'){
-				mui.alert('请选择预定起始与结束时间','系统提示','确定',null);
+				mui.alert('请选择预定起始与结束时间',app.name+'提示','确定',null);
 				return false;
 			};
 			if( (new Date()).getTime() > dataStartDate.getTime()){
-				mui.alert('开始时间不能小于当前时间','系统提示','确定',null);
+				mui.alert('开始时间不能小于当前时间',app.name+'提示','确定',null);
 				return false;
 			};
 			if(data_start_time > data_end_time){
-				mui.alert('开始时间不能大于结束时间','系统提示','确定',null);
+				mui.alert('开始时间不能大于结束时间',app.name+'提示','确定',null);
 				return false;
 			};
 			if( (data_end_time.substring(0,2) - data_start_time.substring(0,2))<4 ){
-				mui.alert('开始时间与结束时间必须相隔4小时以上','系统提示','确定',null);
+				mui.alert('开始时间与结束时间必须相隔4小时以上',app.name+'提示','确定',null);
 				return false;
 			};
 			if(mapResult.length==0){
-				mui.alert('请选择每周共享的星期数','系统提示','确定',null);
+				mui.alert('请选择每周共享的星期数',app.name+'提示','确定',null);
 				return false;
 			};
 			var week = mapResult.toString().replace(/,/g, "");
@@ -313,7 +313,7 @@ var issue = {
 							//跳转到发布成功页面
 							app.addRoute('successfulIssue.html');
 						}else if(res.code!=502 && res.code!=503){
-							mui.alert(res.msg,'系统提示','确定',null);
+							mui.alert(res.msg,app.name+'提示','确定',null);
 						}
 					}
 				})

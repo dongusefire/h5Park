@@ -42,7 +42,7 @@ function readData(){
 			}else if(res.code!=502 &&res.code!=503){
 				plus.nativeUI.closeWaiting();
 				mask.close();//关闭遮罩层
-				mui.alert(res.msg,'系统提示','确定',null);
+				mui.alert(res.msg,app.name+'提示','确定',null);
 			};
 			
 		}

@@ -39,7 +39,7 @@ var vm = new Vue({
 					}else if(res.code==509){
 						_this.readData();
 					}else if(res.code!=502 && res.code!=503){
-						mui.alert(res.msg,'系统提示','确定',null);
+						mui.alert(res.msg,app.name+'提示','确定',null);
 					};
 				}
 			});
@@ -76,7 +76,7 @@ var vm = new Vue({
 							};
 						};
 						if(res.code!=502 && res.code!=503){
-							mui.alert(res.msg,'系统提示','确定',null);
+							mui.alert(res.msg,app.name+'提示','确定',null);
 						};
 					};
 				}
@@ -104,7 +104,7 @@ var vm = new Vue({
 					}else if(res.code==509){
 						_this.removeVehicle(index);
 					}else if(res.code!=502 && res.code!=503){
-						mui.alert(res.msg,'系统提示','确定',null);
+						mui.alert(res.msg,app.name+'提示','确定',null);
 					};
 				}
 			});

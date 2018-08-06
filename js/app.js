@@ -6,11 +6,9 @@ var app = {
 		return str.replace(/(^\s*)|(\s*$)/g,"");
 	},
 	addRoute:function(str){
-		console.log(333)
 		if(str.indexOf('index')==-1 && str.length!=1){
 			str = '/template/'+str;
 		};
-		console.log(str)
 		if (self != top) { 
 		　	window.top.location.href = str;
 		}else{
@@ -41,7 +39,7 @@ function smsSend(phone,type,resCallback,completeCallback){
 		type:'POST',
 		success:function(res,textStatus,xhr){
 			if(res.code!=200){
-				mui.alert(res.msg,'系统提示','确定',null);
+				mui.alert(res.msg,app.name+'提示','确定',null);
 			}else{
 				resCallback(res,textStatus,xhr)
 			};
@@ -55,7 +53,7 @@ function login(str){
 	if(!str || str==''){
 		str='尚未登录或登录已过期';
 	};
-	mui.alert(str,'系统提示','去登录',function(){
+	mui.alert(str,app.name+'提示','去登录',function(){
 		app.addRoute('login.html');
 	});
 };

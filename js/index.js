@@ -363,7 +363,7 @@ var home = {
 						_this.blockLatest();
 					},10000);
 				}else{
-					mui.alert(res.msg,'系统提示','确定',null);
+					mui.alert(res.msg,app.name+'提示','确定',null);
 				};
 			}
 		});
@@ -383,7 +383,7 @@ var home = {
 					_this.list = res.data.list;
 					_this.createParking();
 				}else{
-					mui.alert(res.msg,'系统提示','确定',null);
+					mui.alert(res.msg,app.name+'提示','确定',null);
 				};
 			}
 		});

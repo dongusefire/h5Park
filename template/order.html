@@ -188,7 +188,7 @@
 							if( res.code== '200'){
 								console.log(JSON.stringify(res.data));
 								if(res.data.userCarInfo == ''){
-									mui.alert('请添加车辆','系统提示','确定',function(){
+									mui.alert('请添加车辆',app.name+'提示','确定',function(){
 										mui.openWindow({
 											id:'add_vehicle',
 											url:'add_vehicle.html',
@@ -271,14 +271,14 @@
 								if(res.code == 507){
 									console.log(JSON.stringify(res),233232)
 									if(type=="noChoose"){
-										mui.alert('该车场没有发布无差别车位，请预定自选车位','系统提示','确定',function(){
+										mui.alert('该车场没有发布无差别车位，请预定自选车位',app.name+'提示','确定',function(){
 											//确定之后做处理
 //											$$('.optional').trigger('click');
 											chooseSpace('haveNo');
 										})
 									}							
 								}else{
-									mui.alert(res.msg,'系统提示','确定',null);
+									mui.alert(res.msg,app.name+'提示','确定',null);
 								}
 							}
 						}
@@ -324,13 +324,13 @@
 								}else if(res.code!=502 && res.code!=503){
 									plus.nativeUI.closeWaiting();
 									mask.close();//关闭遮罩层
-									mui.alert(res.msg,'系统提示','确定',null);
+									mui.alert(res.msg,app.name+'提示','确定',null);
 								}
 							},
 							error:function(){
 									plus.nativeUI.closeWaiting();
 									mask.close();//关闭遮罩层
-									mui.alert('服务器连接超时，请稍后再试','系统提示','确定',null);
+									mui.alert('服务器连接超时，请稍后再试',app.name+'提示','确定',null);
 							}
 						})
 					}
@@ -374,13 +374,13 @@
 								}else if(res.code!=502 && res.code!=503){
 									plus.nativeUI.closeWaiting();
 									mask.close();//关闭遮罩层
-									mui.alert(res.msg,'系统提示','确定',null);
+									mui.alert(res.msg,app.name+'提示','确定',null);
 								}
 							},
 							error:function(){
 									plus.nativeUI.closeWaiting();
 									mask.close();//关闭遮罩层
-									mui.alert('服务器连接超时，请稍后再试','系统提示','确定',null);
+									mui.alert('服务器连接超时，请稍后再试',app.name+'提示','确定',null);
 							}
 						})
 					}
@@ -448,11 +448,11 @@
 								    	$$('#num').html(bookFee);
 								    }
 								    if(TimeDifference < 15){
-										mui.alert('起始时间必须小于结束时间15分钟以上','系统提示','确定',null);
+										mui.alert('起始时间必须小于结束时间15分钟以上',app.name+'提示','确定',null);
 										return false;
 									}
 									if(diff2 < 15){
-										mui.alert('起始时间必须大于当前时间15分钟以上','系统提示','确定',null);
+										mui.alert('起始时间必须大于当前时间15分钟以上',app.name+'提示','确定',null);
 										return false;
 									}
 								};
@@ -501,11 +501,11 @@
 								    	$$('#num').html(bookFee);
 								    }
 								    if(TimeDifference < 15){
-										mui.alert('结束时间必须大于起始时间15分钟以上','系统提示','确定',null);
+										mui.alert('结束时间必须大于起始时间15分钟以上',app.name+'提示','确定',null);
 										return false;
 									}
 									if(diff2 < 15){
-										mui.alert('起始时间必须大于当前时间15分钟以上','系统提示','确定',null);
+										mui.alert('起始时间必须大于当前时间15分钟以上',app.name+'提示','确定',null);
 										return false;
 									}
 								};
@@ -543,7 +543,7 @@
 					var time1 = $$('#showStartime').html(),time2 = $$('#showEndtime').html(),time3 = now;
 					var TimeDifference = GetDateDiff(time1, time2, "minute"),diff2 = GetDateDiff(now, time1, "minute");
 					if(time1=='请选择开始时间'||time2=='请选择结束时间'){
-						mui.alert('请选择预定起始与结束时间','系统提示','确定',null);
+						mui.alert('请选择预定起始与结束时间',app.name+'提示','确定',null);
 						return false;
 					}
 					//2.组织数据

@@ -171,7 +171,7 @@
 							}else if(res.code==509){
 								auto_ajax();
 							}else if(res.code!=502 && res.code!=503){
-								mui.alert(res.msg,'系统提示','确定',null);
+								mui.alert(res.msg,app.name+'提示','确定',null);
 							};
 						}
 					})
@@ -293,7 +293,7 @@
 									}else if(res.code==509){
 										orderList(status);
 									}else if(res.code!=502 && res.code!=503){
-										mui.alert(res.msg,'系统提示','确定',null);
+										mui.alert(res.msg,app.name+'提示','确定',null);
 									};
 								}
 						})
@@ -410,7 +410,7 @@
 									}else if(res.code==509){
 										orderList(status);
 									}else if(res.code!=502 && res.code!=503){
-										mui.alert(res.msg,'系统提示','确定',null);
+										mui.alert(res.msg,app.name+'提示','确定',null);
 									};
 								}
 						})
@@ -453,7 +453,7 @@
 							}
 						})
 					}else{
-						mui.alert('订单id不存在，无法查看订单详情','系统提示','确定',null)
+						mui.alert('订单id不存在，无法查看订单详情',app.name+'提示','确定',null)
 					}
 				});
 				//打开支付页面

@@ -80,7 +80,7 @@ var orderPay = {
 				}else if(res.code==509){
 					_this.payResult();
 				}else if(res.code!=502 && res.code!=503){
-					mui.alert(res.msg,'系统提示','确定',null);
+					mui.alert(res.msg,app.name+'提示','确定',null);
 				}
 			}
 		});
@@ -150,7 +150,7 @@ var orderPay = {
 				}else if(res.code==509){
 					_this.getPayInfo();
 				}else if(res.code!=502 && res.code!=503){
-					mui.alert(res.msg,'系统提示','确定',null);
+					mui.alert(res.msg,app.name+'提示','确定',null);
 				};
 			}
 		});
@@ -164,7 +164,7 @@ var orderPay = {
 					_this.getPayInfo();
 				};
 			}else{
-				mui.alert('请选择支付类型','系统提示');
+				mui.alert('请选择支付类型',app.name+'提示');
 			};
 		});
 		mui('.mui-content').on('tap','.radio_inline',function(){
@@ -236,7 +236,7 @@ var orderPay = {
 				}else if(res.code==509){
 					_this.orderDetail();
 				}else if(res.code!=502 && res.code!=503){
-					mui.alert(res.msg,'系统提示','确定',null);
+					mui.alert(res.msg,app.name+'提示','确定',null);
 				};
 			}
 		});

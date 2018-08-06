@@ -79,7 +79,7 @@ var vm = new Vue({
 		validate_tel:function(num){
 			var pre = /^1\d{10}$/;
 			if(!pre.test(num)){
-				mui.alert('请输入正确的手机号','系统提示','确定',null);
+				mui.alert('请输入正确的手机号',app.name+'提示','确定',null);
 				return false;
 			};
 			return true;
@@ -110,18 +110,18 @@ var vm = new Vue({
 		addVehicle:function(){
 			var _this = this;
 			if(_this.city==''){
-				mui.alert('请选择正确的车牌字母','系统提示','确定',null);
+				mui.alert('请选择正确的车牌字母',app.name+'提示','确定',null);
 				return false;
 			};
 			if(_this.plateInput.length!=_this.maxlen){
-				mui.alert('请输入正确的车牌号码','系统提示','确定',null);
+				mui.alert('请输入正确的车牌号码',app.name+'提示','确定',null);
 				return false;
 			};
 			if(!_this.validate_tel(_this.phone_number)){
 				return false;
 			};
 			if(!/^\d{6}$/.test(_this.code)){
-				mui.alert('请输入正确的验证码','系统提示','确定',null);
+				mui.alert('请输入正确的验证码',app.name+'提示','确定',null);
 				return false;
 			};
 			this.car_number = _this.province+_this.city+_this.plateInput;
@@ -147,7 +147,7 @@ var vm = new Vue({
 					}else if(res.code==509){
 						_this.addVehicle();
 					}else if(res.code!=502 && res.code!=503){
-						mui.alert(res.msg,'系统提示','确定',null);
+						mui.alert(res.msg,app.name+'提示','确定',null);
 					};
 				}
 			});

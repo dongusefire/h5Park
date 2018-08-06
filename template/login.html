@@ -50,7 +50,7 @@
 			function validate_tel(num){
 				var pre = /^[1][3,4,5,7,8][0-9]{9}$/;
 				if(!pre.test(num)){
-					mui.alert('请输入正确的手机号','系统提示','确定',null);
+					mui.alert('请输入正确的手机号',app.name+'提示','确定',null);
 					return false;
 				};
 				return true;
@@ -76,14 +76,7 @@
 				};
 			});
 			mui('#login-box').on('tap','#openPro',function(){
-				mui.openWindow("protocol.html","protocol.html",{
-					styles:{
-						popGesture: "close",
-						statusbar:{
-							background:"#fff" 
-						}
-					}
-				});
+				app.addRoute('protocol.html')
 			});
 			mui('#login-box').on('tap','.submit',function(){
 				var code = mui('#code')[0].value;
@@ -92,50 +85,29 @@
 					return false;
 				};
 				if(!/^\d{6}$/.test(code)){
-					mui.alert('请输入正确的验证码','系统提示','确定',null);
+					mui.alert('请输入正确的验证码',app.name+'提示','确定',null);
 					return false;
 				};
 				if(!ajaxSubmit_off){
-					var gpush = plus.push.getClientInfo();
-					var device = plus.os.name;
-					var cid = gpush.clientid;
-					if(cid==''|| cid==null){
-						console.log('未获取到clientid')
-						var _cid = localStorage.getItem('cid');
-						if(_cid!='' && _cid!=null){
-							cid = _cid;
-						};
-					}else if(cid=='' && cid==null){
-						localStorage.setItem('cid',cid);
-					};
 					ajaxSubmit_off = true;
 					mui.ajax(AJAX_PATH+'/auth/login',{
 						data:{
 							"phone_number":phone_number,
-							"code":code,
-							"device":device,
-							"cid":cid
+							"code":code
 						},
 						dataType:'json',
 						type:'POST',
 						success:function(res,textStatus,xhr){
 							ajaxSubmit_off = false;
-							console.log(res);
 							if(res.code==200){
 								localStorage.setItem('phone_number',phone_number);
 								localStorage.setItem('token',res.data);
 								mui.toast('登陆成功');
-								//获取我的页面的窗口对象
-								var old = plus.webview.currentWebview().opener();
-								var my = plus.webview.getWebviewById('template/my.html');
-								mui.fire(old,'readData');
-								mui.fire(my,'readData');
-								//触发我的页面（readData）,从而进行数据刷新
 								mui.later(function(){
 									mui.back();
 								},'1500');
 							}else{
-								mui.alert(res.msg,'系统提示','确定',null);
+								mui.alert(res.msg,app.name+'提示','确定',null);
 							};
 						}
 					});
