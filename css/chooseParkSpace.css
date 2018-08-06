@@ -1,0 +1,98 @@
+.mui-icon {
+    font-size: 28px;
+    margin-top: 4px;
+    vertical-align: sub;
+    color: #b7b7b7;
+}
+.mui-title {
+    font-size: 18px;
+    color: #292929;
+    letter-spacing: 0;
+}
+.mui-bar {
+	background-color: #fff;
+}
+.parking {
+	background-color: #fff;
+	border-bottom: 1px solid #e8e8e8;
+	border-top:1px solid #e8e8e8;
+	padding: 10px 10px;
+	margin-top: -1px;
+}
+.parking p {
+	margin-bottom: 0;
+}
+.parking .title {
+	font-size: 18px;
+	color: #333333;
+	letter-spacing: 0;
+	line-height: 18px;
+	width: 100%;
+}
+.parking .pName {
+	width: 60%;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	display: inline-block;
+}
+.parking .price {
+	font-size: 12px;
+	color: #F25B57;
+	letter-spacing: 0;
+	margin-left: 10px;
+	line-height: 18px;
+}
+.parking .unit {
+	font-size: 12px;
+	color: #8f8f94;
+	letter-spacing: 0;
+	line-height: 17px;
+}
+.parking .address{
+	margin-top: 12px;
+}
+.parking .address img {
+	width: 10px;
+	height: 15px;
+	vertical-align: sub;
+}
+.parking .num {
+	margin-top: 10px;
+}
+.parking .num .free {
+	font-size: 14px;
+	color: #000000;
+	letter-spacing: 0;
+	line-height: 20px;
+}
+#search-box {
+	width: 86%;
+	margin:10px auto;
+}
+#search-box .mui-icon-search::before{
+	content: initial;
+}
+#search-box .mui-search::before {
+	font-family: Muiicons;
+    font-size: 24px;
+    font-weight: 400;
+    position: absolute;
+    top: 50%;
+    right: auto;
+    left: 20px;
+    display: block;
+    margin-right: 0;
+    margin-top: -9px;
+    margin-right: 0;
+    content: '\e466';
+    color:#9497B3;
+}
+#search-box .mui-search input[type=search] {
+	padding: 0;
+	height: 40px;
+	border-radius: 40px;
+	background: rgba(255,255,255,0.90);
+	margin:0;
+	padding-left: 45px;
+}

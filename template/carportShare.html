@@ -1,0 +1,134 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../css/carportShare.css" />
+		<link rel="stylesheet" href="../css/mui.picker.min.css" />
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back  mui-pull-left back"><span class="mui-icon mui-icon-arrowleft" style="font-size: 35px; padding-top: 3px;color:#292929;"></span></a>
+			<h1 class="mui-title">车位共享</h1>
+		</header>
+		<div class="mui-content">
+			<p class="modle">放租模式</p>
+			<div class="choose">
+				<a href="#tab1">全天</a>
+				<a href="#tab2">分时段</a>
+			</div>
+			<div>
+				<div id="tab1" class="tab_content">
+					<div class='select-box'>
+						<!--起始时间选择器-->
+				    	<div class="select">
+				    		<span class="label">入场时间:</span>
+				    		<div>
+				    			<span class="time" id="showStartime" data-options='{"value":"2018-10-10 10:10","beginYear":2010,"endYear":2020}'>2018-06-13 10:10</span>
+				    			<span class="mui-icon mui-icon-arrowright"></span>
+				    		</div>
+				    	</div>
+				    	<!--结束时间选择器-->
+				    	<div class="select">
+				    		<span class="label">出场时间:</span>
+				    		<div>
+				    			<span class="time" id="showEndtime" data-options='{"value":"2018-06-12 10:10","beginYear":2017,"endYear":2020}'>2018-06-13 10:10</span>
+				    			<span class="mui-icon mui-icon-arrowright"></span>
+				    		</div>
+				    	</div>
+				    	<!--一周内天数选择-->
+				    	<div class="select">
+				    		<span class="label">重复:</span>
+				    		<div class="week">
+				    			<span class="day">日</span>
+				    			<span class="day">一</span>
+				    			<span class="day">二</span>
+				    			<span class="day">三</span>
+				    			<span class="day">四</span>
+				    			<span class="day">五</span>
+				    			<span class="day">六</span>
+				    		</div>
+				    		<span class="mui-icon mui-icon-arrowright" style="margin-top: 9px;"></span>
+				    	</div>
+					</div>
+				</div>
+				<div id="tab2" class="tab_content">
+					<div class="select-box">
+						<!--一周内天数选择-->
+				    	<div class="select">
+				    		<span class="label">重复:</span>
+				    		<div class="week">
+				    			<span class="day">日</span>
+				    			<span class="day">一</span>
+				    			<span class="day">二</span>
+				    			<span class="day">三</span>
+				    			<span class="day">四</span>
+				    			<span class="day">五</span>
+				    			<span class="day">六</span>
+				    		</div>
+				    		<span class="mui-icon mui-icon-arrowright" style="margin-top: 9px;"></span>
+				    	</div>
+					</div>
+				</div>		
+			</div>
+		</div>
+		<script src="../js/mui.min.js"></script>
+		<script src="../js/mui.picker.min.js"></script>
+		<script src="../js/zepto.js"></script>
+		<script type="text/javascript">
+			(function($$,doc){
+				$$.init();
+				$$.ready(function(){
+					//时间拾取器
+					var btns = $$('.time');
+					btns.each(function(i,btn){
+						btn.addEventListener('tap',function(){
+							var _self = this;
+							if(_self.picker){
+								_self.picker.show(function(rs){
+									_self.innerHTML=res.text;
+									_self.picker.dispose();
+									_self.picker = null;
+								});
+							}else{
+								var optionsJson = this.getAttribute('data-options')||'{}';
+								var options = JSON.parse(optionsJson);
+								var id = this.getAttribute('id');
+								/*
+								 *首次显示实例化组件
+								 * 这里把optios放到了按钮的dom上，
+								 * 也可以直接通过代码声明options用于实例化DtPicker
+								*/
+								_self.picker = new $$.DtPicker(options);
+								_self.picker.show(function(rs){
+									_self.innerHTML=rs.text;
+									_self.picker.dispose();
+									_self.picker = null;
+								})
+							}
+						},false);
+					});
+
+					
+					//模式切换
+					$('.tab_content').hide();
+					$('.choose a:first-child').addClass('active');
+					$('#tab1').show();
+					$('.choose a').click(function(){
+						$('.choose a').removeClass('active');
+						$(this).addClass("active");
+						$(".tab_content").hide();
+						var activeTab = $(this).attr("href");
+						$(activeTab).show();
+						return false;
+					})
+				});
+			})(mui,document);
+		</script>
+	</body>
+
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>首页-账本</title>
+    <link rel="stylesheet" type="text/css" href="../css/mui.min.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/app.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/index.css"/>
+    <script src="../js/vue.min.js" type="text/javascript" charset="utf-8"></script>
+    <style>
+		html,body{
+			background: initial;
+		}
+	</style>
+</head>
+<body>
+	<div id="account">
+		<div class="current account-info">
+			<span class="account-name">当前账本HASH</span>
+			<span class="account-address">{{ledgerHash}}</span>
+			<span class="account-time">{{closeTime}}</span>
+		</div>
+		<div class="parent account-info">
+			<span class="account-name">父账本HASH</span>
+			<span class="account-address">{{parentLedgerHash}}</span>
+			<span class="account-time">{{parentCloseTime}}</span>
+		</div>
+	</div>
+	<script src="../js/mui.min.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		var ws,wo;
+		var vm = new Vue({
+			el:'#account',
+			data:{
+				closeTime:'',
+				ledgerHash:'',
+				parentLedgerHash:'',
+				parentCloseTime:'',
+			},
+		});
+		mui.plusReady(function(){
+			ws = plus.webview.currentWebview();
+			wo = ws.opener();
+		});
+		window.addEventListener('updata',function(event){
+			var data = event.detail.latest;
+			vm.closeTime = data.closeTime.substring(0,16);
+			vm.ledgerHash = data.ledgerHash;
+			vm.parentLedgerHash = data.parentLedgerHash;
+			vm.parentCloseTime = data.parentCloseTime.substring(0,16);
+			console.log('更新账本')
+			mui.fire(wo,'showAccount');
+		});
+	</script>
+</body>
+</html>

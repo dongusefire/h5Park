@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>首页-停车场</title>
+    <link href="../css/mui.min.css" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" type="text/css" href="../css/app.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/index.css"/>
+    <script src="../js/vue.min.js" type="text/javascript" charset="utf-8"></script>
+    <style>
+		html,body{
+			background: initial;
+		}
+	</style>
+</head>
+<body id="body">
+	<div id="parking-box">
+		<div class="parking">
+			<div class="parking-l">
+				<div class="top">
+					<span class="name">{{parking_lot_name}}</span>
+				</div>
+				<p class="address">{{parking_lot_address}}</p>
+				<div class="parking-b">
+					<span class="price"><span>{{price/100}}元</span>/小时</span>
+					<span class="num">车位:{{free_number}}/{{number}}</span>
+				</div>
+			</div>
+			<div class="parking-r">
+				<div class="parking-img"><span class="goRoute"></span></div>
+				<p>{{distance}}km</p>
+			</div>
+		</div>
+	</div>
+    <script src="../js/mui.min.js"></script>
+    <script type="text/javascript">
+    	var vm = new Vue({
+    		el:'#parking-box',
+    		data:{
+    			parking_lot_address:'',
+    			longitude:'',
+    			latitude:'',
+    			parking_lot_name:'',
+    			price:'',
+    			number:0,
+				free_number:0,
+				distance:'',
+				parking_lot_number:''
+    		},
+    		methods:{
+    			readData:function(data){
+    				this.parking_lot_address = data.parking_lot_address;
+	    			this.longitude = data.longitude;
+	    			this.latitude = data.latitude;
+	    			this.parking_lot_name = data.parking_lot_name;
+	    			this.price = data.price;
+	    			this.number = data.number;
+	    			this.free_number = data.free_number;
+	    			this.distance = (data.distance/1000).toFixed(3);
+	    			this.parking_lot_number = data.parking_lot_number;
+    			}
+    		}
+    	})
+    	mui.plusReady(function(){
+    		var w = plus.webview.currentWebview();
+    		vm.readData(w);
+    	});
+    	mui('#body').on('tap','.goRoute',function(e){
+    		localStorage.setItem('parking_lot_address',vm.parking_lot_address);
+    		plus.webview.currentWebview().opener().evalJS('home.createRoute('+vm.longitude+','+vm.latitude+')');
+    		e.stopPropagation();
+    	});
+    	mui('#body').on('tap','#parking-box',function(){
+    		localStorage.setItem('parkingName',vm.parking_lot_name);
+    		plus.webview.currentWebview().opener().evalJS('home.bespeak('+vm.parking_lot_number+')');
+    	});
+    </script>
+</body>
+</html>

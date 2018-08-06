@@ -1,0 +1,160 @@
+.g-content {
+	overflow-y: auto;
+}
+.addvehicle {
+	height: 44px;
+	width:91%;
+	margin:0 auto;
+	margin-top: 32px;
+	margin-bottom: 24px;
+	background: #FFFFFF;
+	border: 1px dashed #DCDCDC;
+	border-radius: 4px;
+	line-height: 44px;
+	text-align: center;
+	font-size: 16px;
+	color: #333333;
+}
+.addvehicle i {
+	font-weight: 600;
+	font-size: 20px;
+	vertical-align: bottom;
+	margin-right: 6px;
+}
+.vehicle-title {
+	line-height: 42px;
+	font-size: 14px;
+	color: #9B9B9B;
+	padding-left: 6.3%;
+}
+.vehicle-list {
+	width:93%;
+	margin:0 auto;
+}
+.vehicle-box {
+	background: #FFFFFF;
+	box-shadow: 0 2px 4px 0 rgba(0,0,0,0.08);
+	border-radius: 8px;
+	padding:0 12px;
+	margin-bottom: 12px;
+}
+.vehicle-box .vehicle-tbar {
+	line-height: 43px;
+	height: 43px;
+	border-bottom: 1px dashed #E8E8E8;
+}
+.vehicle-box .vehicle-tbar .mui-checkbox label{
+	font-size: 14px;
+	color: #666666;
+	padding-left: 33px;
+	padding-right: 0;
+}
+.vehicle-box .vehicle-tbar .mui-checkbox input {
+	left:4px;
+	top:11px;
+	right:0;
+	width:20px;
+	height:20px;
+}
+.vehicle-box .vehicle-tbar .mui-checkbox input:before {
+	font-size: 20px;
+}
+.vehicle-box .vehicle-tbar .mui-checkbox input[type=checkbox]:checked:before {
+	color:#39A1FF;
+}
+.vehicle-box .vehicle-tbar .mui-icon-trash,.vehicle-box .vehicle-tbar .handle {
+	font-size: 18px;
+	margin-top: 12px;
+}
+.vehicle-box .vehicle-tbar .mui-icon-trash:before,.vehicle-box .vehicle-tbar .handle:before {
+	color:#231916;
+}
+.vehicle-box .vehicle-b {
+	height: 55px;
+	line-height: 55px;
+	font-size: 18px;
+	color: #333333;
+	padding-left: 4px;
+}
+.vehicle-status {
+	font-size: 14px;
+}
+.vehicle-status.status1{
+	color: #087CFD;
+}
+.vehicle-status.status2{
+	color: #F2AC00;
+}
+.vehicle-status.status3{
+	color: #FF5454;
+}
+.parkingArea {
+	margin-top: 20px;
+}
+.parkingArea .vehicle-b {
+	height: auto;
+	min-height: 50px;
+	padding:0 1%;
+}
+.parkingArea .vehicle-b span {
+  width: 30%;
+  margin-right: 3.33%;
+  text-align:center;
+  margin-top:20px;
+  height:30px;
+  line-height:30px;
+  border:1px solid #dcdcdc;
+  border-radius:30px;
+  font-size:14px;
+  color: #333333;
+  display: inline-block;
+  
+}
+.my-parking .vehicle-name {
+	font-size: 14px;
+}
+.my-parking .vehicle-b {
+	font-size: 14px;
+	color:#999;
+	overflow: hidden;
+    white-space:nowrap;
+    text-overflow:ellipsis;
+}
+
+.rent-list {
+	margin-top: 10px;
+	color:#333;
+	font-family: "微软雅黑";
+}
+.rent-list .vehicle-box .open-details {
+	font-size: 14px;
+	color: #333333;
+}
+.rent-list .vehicle-box .vehicle-b {
+	height: auto;
+	line-height: initial;
+}
+.rent-list .vehicle-box .vehicle-b b {
+	font-size: 18px;
+	color: #333333;
+	padding:10px 0;
+	display: block;
+	font-weight: 500;
+}
+.rent-list .vehicle-box .vehicle-b p {
+	font-size: 14px;
+	color: #9B9B9B;
+	padding-bottom: 10px;
+	margin: 0;
+}
+.rent-list .vehicle-status.status4 {
+	color: #9B9B9B;
+}
+#rent-null {
+	text-align: center;
+	height: 100px;
+	line-height: 100px;
+	font-size: 14px;
+	color:#959595;
+	display: none;
+}

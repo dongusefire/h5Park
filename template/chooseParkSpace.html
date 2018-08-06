@@ -1,0 +1,40 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>选择车场</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+	<link href="../css/mui.min.css" rel="stylesheet" />
+	<link rel="stylesheet" type="text/css" href="../css/app.css"/>
+	<link rel="stylesheet" href="../css/chooseParkSpace.css" />
+	<script src="../js/vue.min.js"></script>
+</head>
+<body>
+	<header class="mui-bar mui-bar-nav header-bar">
+		<a class="mui-pull-left mui-action-back" id="hideView"><span class="mui-icon mui-icon-arrowleft" style="font-size: 35px; padding-top: 0px;color:#292929;"></span></a>
+	    <h1 class="mui-title">选择车场</h1>
+	</header>
+	<div class="mui-content g-content" v-cloak>
+		<div id="search-box">
+			<div class="mui-input-row mui-search mui-active">
+			    <input type="search" class="mui-input-clear" v-model="keywords" @change="load" placeholder="">
+			</div>
+		</div>
+	    <div class="list-box">
+	    	<div class="parking" v-for="item in items" :data-num="item.parking_lot_number" :data-name="item.parking_lot_name" :data-id="item.parking_lot_id">
+	    		<!--title-->
+	    		<div class="title">{{item.parking_lot_name}}<!--<span class="price">{{item.price}}元</span><span class="unit">/小时</span>--></div>
+	    		<!--address-->
+	    		<p class="address">
+	    			<img src="../img/dwt.png">
+	    			{{item.parking_lot_address}}
+	    		</p>
+	    		<!--<p class="num">车位：<span class="free">{{item.free_number}}</span><span class="all">/{{item.number}}</span></p>-->
+	    	</div>
+	    </div>
+	</div>
+	<script src="../js/mui.min.js"></script>
+	<script src="../js/app.js"></script>
+	<script src="../js/chooseParkSpace.js" type="text/javascript" charset="utf-8"></script>
+</body>
+</html>

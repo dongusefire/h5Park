@@ -1,0 +1,33 @@
+.balance-list {
+	margin-top: 0 !important;
+}
+.balance-list h4 {
+	margin: 0;
+	color:#333;
+	font-size: 14px;
+	line-height: 18px;
+	font-weight: normal;
+}
+.balance-list p {
+	color:#9b9b9b;
+}
+.balance-list:after,.balance-list:before {
+	content: initial;
+}
+.balance-list .mui-table-view-cell:after {
+	left:0;
+	background-color: #ececec;
+}
+.balance-list .mui-table-view-cell .price {
+	height:40px;
+	line-height: 40px;
+	color:#333;
+	font-size: 18px;
+}
+.balance-list .mui-table-view-cell .price i {
+	font-size: 12px;
+	font-style: normal;
+}
+.balance-list .mui-table-view-cell .price2 {
+	color:#ff5454;
+}

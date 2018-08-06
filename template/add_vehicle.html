@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>新增车辆</title>
+    <link href="../css/mui.min.css" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" type="text/css" href="../css/app.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/add_vehicle.css"/>
+    <script src="../js/vue.min.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+	<header class="mui-bar mui-bar-nav header-bar">
+		<a class="mui-action-back  mui-pull-left back"><span class="mui-icon mui-icon-arrowleft" style="font-size: 35px; padding-top: 3px;color:#292929;"></span></a>
+	    <h1 class="mui-title">新增车辆</h1>
+	</header>
+	<div class="mui-content g-content" v-cloak>
+		<div class="vehicle-box">
+			<div class="wrap">
+				<h3>添加车牌 </h3>
+				<div class="vehicle-num">
+			        <div class="form-item">
+			          <div class="license-plate">
+			            <div class="num" @click="toggleProvince('open')">{{province}}</div>
+			            <div class="line"></div>
+			            <div class="num" @click="toggleCity('open')">{{city}}</div>
+			          </div>
+			          <div class="plate-order">
+			            <div class="num" :class="[plateIndex==0? 'active':'']">{{carArr[0]}}</div>
+			            <div class="num" :class="[plateIndex==1? 'active':'']">{{carArr[1]}}</div>
+			            <div class="num" :class="[plateIndex==2? 'active':'']">{{carArr[2]}}</div>
+			            <div class="num" :class="[plateIndex==3? 'active':'']">{{carArr[3]}}</div>
+			            <div class="num" :class="[plateIndex==4? 'active':'']">{{carArr[4]}}</div>
+			            <div class="plateInput-box">
+				          	<input type="text" onpaste="return false" ondragenter="return false" oncontextmenu="return false;" @focus="focusInput($event)" @blur="blurInput($event)" ref="plateInput" @input="setInput(event)" class="plateInput"/>
+				        </div>
+			            <div class="num" :class="[maxlen==5? 'hide':'',plateIndex==5? 'active':'']">{{carArr[5]}}</div>
+			          </div>
+			          <div class="plate-order" style="margin-left: 0;">
+			          	<div class="num addNum" @click="addNum" :class="[maxlen==6? 'hide':'']"></div>
+			          </div>
+			        </div>
+				</div>
+			</div>
+			<!--<div class="newvehicle">
+				<div class="mui-input-row mui-checkbox mui-left">
+				  <label>新能源</label>
+				  <input name="checkbox1" value="Item 1" type="checkbox">
+				</div>
+			</div>-->
+		</div>
+		<div class="inline-input">
+			<label>手机号</label>
+		    <input type="number" class="mui-input-clear" v-model="phone_number" placeholder="请输入手机号">
+		    <span v-show="!isSend" @click="send">获取验证码</span>
+		    <span class="seconds" v-show="isSend">重新获取<span class="num">{{num}}</span>s</span>
+		</div>
+		<div class="inline-input">
+			<label>验证码</label>
+		    <input type="number" class="mui-input-clear" v-model="code" maxlength="6" placeholder="请输入验证码">
+		</div>
+		<div class="btn-box">
+			<!--:class="[isDefault? 'btn-default':'']"-->
+			<button type="button" class="mui-btn mui-btn-primary mui-btn-block" @click="addVehicle">确&nbsp;认</button>
+		</div>
+		<div class="keyboard" :class="[provinceBox? 'show':'']">
+			<div class="plateFirstKey" :class="[provinceBox? 'animate-show':'']">
+				<div class="FirstKey-box">
+					<span class="FirstKey" v-for="item in provinceItems" @click="selectProvince(item)">{{item}}</span>
+				</div>
+				<button class="closebtn" @click='toggleProvince("close")'>关闭</button>
+			</div>
+		</div>
+		<div class="keyboard" :class="[cityBox? 'show':'']">
+			<div class="plateFirstKey" :class="[cityBox? 'animate-show':'']">
+				<div class="FirstKey-box">
+					<span class="FirstKey" v-for="item in cityItems" @click="selectCity(item)">{{item}}</span>
+				</div>
+				<button class="closebtn" @click='toggleCity("close")'>关闭</button>
+			</div>
+		</div>
+	</div>
+    <script src="../js/mui.min.js"></script>
+    <script src="../js/app.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../js/add_vehicle.js" type="text/javascript" charset="utf-8"></script>
+</body>
+</html>

@@ -1,0 +1,364 @@
+.g-content {
+	overflow-y: auto;
+}
+.mui-icon {
+	font-size: 28px;
+	margin-top: 4px;
+	vertical-align: sub;
+	color: #b7b7b7;
+}
+
+.mui-title {
+	font-size: 18px;
+	color: #292929;
+	letter-spacing: 0;
+}
+
+.withborder {
+	border-top: 1px solid #ececec;
+	border-bottom: 1px solid #ececec;
+	margin-top: -1px;
+}
+
+body {
+	background-color: #f5f5f5;
+	height: 100%;
+}
+
+.content {
+	margin-top: 44px;
+}
+
+.annotation {
+	font-size: 11px;
+	color: #666666;
+	letter-spacing: 0;
+	margin: 0;
+	padding: 8px 12px;
+}
+
+.withdraw {
+	height: 50px;
+	line-height: 50px;
+	font-size: 14px;
+	color: #333333;
+	letter-spacing: 0;
+	background-color: #fff;
+	padding-left: 16px;
+	position: relative;
+}
+
+.withdraw .arrow {
+	position: absolute;
+	right:0;
+	top:6px;
+}
+
+textarea {
+	border: none;
+	margin: 0;
+	display: block;
+	font-size: 14px;
+	color: #333333;
+}
+.character {
+	height: 50px;
+	line-height: 50px;
+	width: 100%;
+	background-color: #ffffff;
+	overflow: hidden;
+}
+.character .character {
+	width: 90px;
+    padding-right: 10px;
+    text-align: right;
+    font-size: 14px;
+    color: #333333;
+    height: 48px;
+    line-height: 48px;
+}
+.character label {
+	font-size: 14px;
+	color: #333333;
+	letter-spacing: 0;
+}
+.check:before {
+	content: "";
+	display: table;
+}
+
+.check:after {
+	content: "";
+	display: table;
+	clear: both;
+}
+
+.check>.radio-inner:last-child {
+	margin-right: 0;
+}
+.check {
+	font-size: 0;
+}
+.check .radio-inner {
+	display: inline-block;
+	position: relative;
+	margin-right: 10px;
+}
+.check .radio-inner:last-child {
+	margin-right: 0;
+}
+.check .radio-inner input{
+	display: none;
+}
+.check .user-defined span.circle {
+	display: inline-block;
+	width:26px;
+	height:26px;
+	vertical-align: middle;
+	border: 1px solid #979797;
+	border-radius: 50%;
+	cursor: pointer;
+	background-color: transparent;
+	position: relative;
+}
+.check input[type=radio]:checked + .user-defined .circle::after {
+	content: '';
+	position: absolute;
+	left:3px;
+	right:3px;
+	top:3px;
+	width:18px;
+	height:18px;
+	border-radius: 50%;
+	background-color: #39A1FF;
+}
+
+.picture {
+	font-size: 14px;
+	color: #333333;
+	letter-spacing: 0;
+	background-color: #fff;
+}
+
+.picture label {
+	line-height: 50px;
+	padding-left: 12px;
+}
+
+.addPic {
+	padding: 0 0 50px 3px;
+	font-size: 0;
+}
+.add {
+	width: 27%;
+	margin-left:3%;
+	margin-right: 3%;
+	height: 0;
+	border:1px dashed #9b9b9b;
+	text-align: center;
+	padding-bottom:27%;
+	position: relative;
+	font-size: 12px;
+	display: inline-block;
+}
+.add .tip {
+	position: absolute;
+	top:100%;
+	left:0;
+	right: 0;
+	padding-top: 10px;
+	text-align: center;
+	color: #666666;
+}
+.ask {
+	padding: 8px 12px;
+	color:#9B9B9B;
+}
+.ask span {
+	font-size: 14px;
+	color:  #39A1FF;
+}
+.submit {
+	width: 94%;
+	border:none;
+	margin-left: 3%;
+	margin-top: 5px;
+	margin-bottom: 20px;
+	background-image: linear-gradient(-180deg, #53B9FF 0%, #087CFD 85%);
+	border-radius: 8px;
+	height: 54px;
+	color:#ffffff;
+	font-size: 16px;
+}
+.form-item {
+	width: 100%;
+	background: #fff;
+	margin-bottom: 10px;
+}
+.form-item .input-item {
+	height: 50px;
+	display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-box-align: center;
+    -moz-align-items: center;
+    -webkit-align-items: center;
+    align-items: center;
+	border-bottom: 1px solid #ececec;
+}
+.form-item .input-item:last-child {
+	border:none;
+}
+.form-item .input-item .item-label {
+	width:110px;
+	padding-right: 10px;
+	text-align:right;
+	font-size: 14px;
+    color: #333333;
+}
+.form-item .input-item .item-content {
+	-webkit-box-flex: 1.0;
+    -moz-flex-grow: 1;
+    -webkit-flex-grow: 1;
+    flex-grow: 1;
+    line-height: 50px;
+    font-size: 14px;
+}
+.form-item .input-item .item-content input:not(.min-input) {
+	padding-left: 0;
+}
+.form-item .input-item .item-content .min-input {
+	max-width: 70px;
+}
+.form-item .input-item .item-content .min-inputbox {
+	position: relative;
+	display: inline-block;
+	height: 100%;
+}
+.form-item .input-item .item-content .min-inputbox:after{
+	content: '';
+	position: absolute;
+	left:5px;
+	right:5px;
+	bottom: 10px;
+	height: 1px;
+	border-bottom:1px #999 solid;
+}
+.form-item .input-item input {
+	border:none;
+	margin: 0;
+	font-size: 14px;
+}
+.parkName {
+	margin-right: 30px;
+	display: block;
+	overflow: hidden;
+    white-space:nowrap;
+    text-overflow:ellipsis;
+}
+.upload-box {
+	position: absolute;
+	left:0;
+	right:0;
+	bottom:0;
+	top:0;
+	background: url(../img/plus.png) no-repeat center;
+	overflow: hidden;
+}
+.upload-box .file-box {
+	width: 100%;
+	height: 100%;
+	position: relative;
+	z-index: 3;
+}
+.upload-box .file-box .webuploader-pick {
+	width:100%;
+	height:100%;
+}
+.upload-box .file-box input {
+	opacity: 0;
+}
+.upload-box .upload-fileInfo {
+	position: absolute;
+	left:0;
+	right:0;
+	top:0;
+	bottom:0;
+	z-index: 2;
+	display: none;
+}
+.upload-box .upload-fileInfo .img-box {
+	width: 100%;
+    height: 100%;
+    text-align: center;
+}
+.upload-box .upload-fileInfo .img-box img {
+	max-width: 100%;
+    max-height: 100%;
+    display: inline-block;
+}
+.upload-box .upload-fileInfo span.mui-icon {
+	position: absolute;
+	top:0;
+	right:0;
+	margin:0;
+	border-radius: 14px;
+	background: #f00;
+	color:#fff;
+}
+.input-change {
+	text-transform:Uppercase;
+}
+.input-prompt {
+	padding-left: 110px;
+	padding-right: 10px;
+	border-bottom: 1px solid #ececec;
+	color:#9B9B9B;
+}
+.input-prompt p {
+	margin:0;
+	line-height: 35px;
+}
+.reminder {
+	margin:0 3%;
+	padding:10px 0;
+}
+.reminder h6 {
+	font-weight: normal;
+	font-size: 12px;
+	margin-bottom: 10px;
+	color: #9B9B9B;
+}
+.reminder p {
+	font-size: 12px;
+	color: #9B9B9B;
+	margin: 0;
+}
+#waiting-mask {
+	position: fixed;
+	left:0;
+	right:0;
+	bottom:0;
+	top:0;
+	z-index: 11;
+	background: #fff;
+	opacity: 0;
+}
+#waiting {
+	position: fixed;
+	left:10%;
+	top:40%;
+	width: 80%;
+	z-index: 12;
+	text-align: center;
+}
+#waiting span {
+	padding:10px 15px;
+	background: rgba(0,0,0,0.5);
+	color:#fff;
+	border-radius: 10px;
+	display: inline-block;
+	font-size: 14px;
+}

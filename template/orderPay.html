@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>订单支付</title>
+    <link href="../css/mui.min.css" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" type="text/css" href="../css/app.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/orderPay.css"/>
+</head>
+<body>
+	<header class="mui-bar mui-bar-nav header-bar">
+		<a class="mui-action-back  mui-pull-left back"><span class="mui-icon mui-icon-arrowleft" style="font-size: 35px; padding-top: 3px;color:#292929;"></span></a>
+	    <h1 class="mui-title">订单支付</h1>
+	</header>
+	<div class="mui-content" v-cloak>
+		<div class="mui-main">
+			<div class="mui-details">
+				<div class="name">
+		    		<span class='big' id="parkName"></span>
+		    	</div>
+		    	<p class="address"><img src="../img/Page1.png"/><span id="parkAddress"></span></p>
+		    	<p class="num">车位： <span class='occupied' id="parkType"></span></p>
+			</div>
+			<div class="car-num">
+				<p class="plate-num">车牌号：<span style="color:#666666" id="plateNum"></span></p>
+			</div>
+			<div class="park-time">
+				<p class="time lower-time">
+					<span class="state-time">入场时间:</span>
+					<span class="date-time" id="stateTime"></span>
+				</p>
+				<p class="time in-time">
+					<span class="state-time">离场时间:</span>
+					<span class="date-time" id="endTime"></span>
+				</p>
+			</div>
+	   </div>
+	    <div class="mui-input-row change">
+	    	  <div style="width:97%;">
+	                <!--<div class="radio_inline mui-radio" id="balance">
+	                	<span class="item-icon"><img src="../img/yu.png"></span>
+	                	<label for="radio_yu">余额支付</label>
+	                    <input name="payType" type="radio" checked value="0">
+	                </div>-->
+	                <div class="radio_inline mui-radio" id="alipay">
+	                    <span class="item-icon"><img src="../img/wei.png"></span>
+	                    <label for="radio_wei">微信支付</label> 
+	                    <input name="payType" class="pay-type" type="radio" value="2">
+	                </div>  
+	                <div class="radio_inline mui-radio" id="wxpay">
+	                    <span class="item-icon"><img src="../img/zhi.png"></span>
+	                    <label for="radio_zhi">支付宝支付</label> 
+	                    <input name="payType" class="pay-type" type="radio" value="1">  
+	                </div>  
+              </div>
+          </div>
+	   <div class="q-pay" id="payBtn">
+	   	    <p>立即支付￥<span id="parkPrice">12</span>元</p>
+	   </div>
+	</div>
+	<script src="../js/mui.min.js"></script>
+	<script src="../js/jquery-1.11.2.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/app.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/order_pay.js" type="text/javascript" charset="utf-8"></script>
+	</body>
+</html>

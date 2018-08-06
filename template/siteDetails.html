@@ -1,0 +1,104 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../css/siteDetails.css" />
+		<script src="../js/vue.min.js"></script>
+	</head>
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back  mui-pull-left back"><span class="mui-icon mui-icon-arrowleft" style="font-size: 35px; padding-top: 0;color:#292929;"></span></a>
+			<h1 class="mui-title">车场详情</h1>
+		</header>
+		<div style="margin-top: 44px;" class="box">
+			<div class="picture" :style="{backgroundImage:'url('+p_img+')'}"></div>
+		    <div class="siteInfo">
+		    	<div class="name">
+		    		<span class='big'>{{p_name}}</span> <span class="price">{{p_price/100}}元</span>/小时
+		    	</div>
+		    	<p class="address"><img src="../img/Page1.png"/> {{p_address}}</p>
+		    	<p class="num">
+		    		车位： <span class='occupied'>{{p_free}}</span>/{{p_all}}
+		    	</p>
+		    	<span class="guide">
+		    		<img src="../img/dhicon.png" alt="" />
+		    	</span>
+		    </div>
+		    <!--温馨提示-->
+		    <div class="prompt">
+		    	<p class="tit">温馨提示：</p>
+		    	<p>欢迎使用，请您在选择车位时确认好选择时间，车牌号等信息，以确保预定信息准确提交<p>
+		    </div>
+		</div>
+
+		<script src="../js/mui.min.js"></script>
+		<script src="../js/app.js"></script>
+		<script type="text/javascript">
+			mui.init();
+			var ws='',token;
+			mui.plusReady(function(){
+				ws = plus.webview.currentWebview();
+				token= localStorage.getItem('token');
+				vm.getData();
+			});
+			var vm = new Vue({
+				el:'.box',
+				data:{
+					p_name:'停车场名称',
+					p_address:'停车场地址',
+					p_free:'0',
+					p_all:'0',
+					p_price:'0',
+					p_img:''
+				},
+				methods:{
+					getData:function(){
+						var that = this;
+						mui.ajax(AJAX_PATH+'/parking/time_list?token='+token,{
+							data:{
+								'park_lot_num':ws.park_lot_num
+							},
+							type:'get',
+							dataType:'json',
+							success:function(res){
+								if(res.code==200){
+									var _data = res.data.parkingInfo;
+									that.p_name = _data.parking_lot_name;
+									that.p_address = _data.parking_lot_address;
+									that.p_free = _data.free_number;
+									that.p_all = _data.number;
+									that.p_price = _data.price;
+									if(_data.parking_lot_img&&_data.parking_lot_img!=''){
+										if(_data.parking_lot_img.indexOf('http')!=-1){
+											that.p_img = _data.parking_lot_img
+										}else{
+											that.p_img = AJAX_HOST+_data.parking_lot_img
+										}
+									}else{
+										that.p_img = '../img/parkbackground.png';
+									}
+								}else if(res.code==509){
+									that.getData();
+								}else if(res.code!=502 && res.code!=503){
+									mui.alert(res.msg,'系统提示','确定',null);
+								}
+							}
+						})	
+					}
+				}
+			});
+			
+			//调用导航
+			mui('.box').on('tap','.guide',function(e){
+				localStorage.setItem('parking_lot_address',vm.p_address);
+				plus.webview.getWebviewById('template/home.html').evalJS('home.createRoute('+ws.lng+','+ws.lat+')');
+			    e.stopPropagation();
+			})
+		</script>
+	</body>
+
+</html>

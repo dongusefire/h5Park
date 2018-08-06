@@ -1,0 +1,48 @@
+.header-bar{
+	background: #3882fd;
+}
+#mui-icon-left{
+	color:#fff;
+}
+.header-bar .title{
+	color:#fff;
+	font-size:18px;
+}
+.g-content{
+	background: #fff;
+	padding-bottom:57px;
+	overflow-y: auto;
+	user-select:text;
+	-webkit-user-select:text;
+	-moz-user-select:text;
+	-ms-user-select:text;
+}
+.mui-content .mui-input{
+	padding:26px 22px 20px 16px;
+	position: relative;
+}
+.mui-content .mui-input:after{
+	content: '';
+	position: absolute;
+	left:0;
+	right:0;
+	bottom:0;
+	height:1px;
+	background: #efecec;
+}
+.mui-content .mui-input span{
+	display: block;
+	font-size:15px;
+	color:#727272;
+	padding-bottom:15px;
+}
+.mui-content .mui-input p{
+	display: block;
+	height:auto;
+	font-size:15px;
+	color:#2A2A2A;
+	word-wrap:break-word;
+    word-break:break-all;
+    overflow: hidden;
+	margin-bottom:0;
+}

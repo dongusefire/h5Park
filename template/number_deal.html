@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+	    <meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<title>数字资产交易</title>
+		<link href="../css/mui.min.css" rel="stylesheet" type="text/css"/>
+		<link rel="stylesheet" type="text/css" href="../css/app.css"/>
+		<link rel="stylesheet" type="text/css" href="../css/number_deal.css"/>
+	</head>
+	<body>
+		<header class="mui-bar mui-bar-nav header-bar">
+		    <a id="mui-icon-left"class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+		    <h1 class="mui-title title">数字资产交易</h1>
+		</header>
+		<div class="mui-content g-content"></div>
+	<body>
+		<script src="../js/mui.min.js"></script>
+		<script src="../js/app.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			mui.init();
+			var numDeal = {
+				ws:null,
+				wo:null,
+				getData:function(){
+					var hash = this.ws.hash,token = localStorage.getItem('token'),_this=this;
+					mui.ajax(AJAX_PATH+'/user/order/hash/'+hash+'?token='+token,{
+						dataType:'json',
+						type:'POST',
+						success:function(res,textStatus,xhr){
+							if(res.code==200){
+								var resData = res.data;
+								var _html = '<div class="mui-input">'+
+									'<span>交易时间</span><p>'+resData.date+'</p>'+
+								'</div>'+
+								'<div class="mui-input">'+
+									'<span>交易Hash值</span><p>'+resData.hash+'</p>'+
+								'</div>'+
+								'<div class="mui-input">'+
+									'<span>交易类型</span><p>'+resData.type+'</p>'+
+								'</div>'+
+								'<div class="mui-input">'+
+									'<span>数字资产编码</span><p>'+resData.payment.source.amount.code+'</p>'+
+								'</div>'+
+								'<div class="mui-input">'+
+									'<span>交易数量</span><p>1</p>'+
+								'</div>'+
+								'<div class="mui-input">'+
+									'<span>支付方地址</span><p>'+resData.payment.source.account+'</p>'+
+								'</div>';
+								mui('.mui-content')[0].innerHTML= _html;
+							}else if(res.code==509){
+								_this.getData();
+							}else if(res.code!=502 && res.code!=503){
+								mui.alert(res.msg,'系统提示','确定',null);
+							};
+						}
+					});
+				},
+				bindEvent:function(){
+					var _this = this;
+					document.addEventListener('plusready',function(){
+						_this.ws = plus.webview.currentWebview();
+						_this.wo = _this.ws.opener();
+						_this.getData();
+					});
+				},
+				init:function(){
+					this.bindEvent();
+				}
+			};
+			numDeal.init();
+		</script>
+	</body>
+</html>

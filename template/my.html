@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>我的</title>
+    <link href="../css/mui.min.css" rel="stylesheet" type="text/css"/>
+    <link href="../css/icons-extra.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../css/app.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/my.css"/>
+    <script src="../js/vue.min.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+	<nav class="mui-bar mui-bar-tab nav-tab-bar">
+	    <a class="mui-tab-item" href="/">
+	        <span class="mui-icon home"></span>
+	        <span class="mui-tab-label">预定</span>
+	    </a>
+	    <a class="mui-tab-item" href="template/issue.html" data-type="issue">
+	        <span class="mui-icon push"></span>
+	        <span class="mui-tab-label">发布</span>
+	    </a>
+	    <a class="mui-tab-item mui-active" href="template/my.html">
+	        <span class="mui-icon my"></span>
+	        <span class="mui-tab-label">我的</span>
+	    </a>
+	</nav>
+	<div class="mui-content g-content" v-cloak>
+		<div class="park-header" id="park-header">
+		    <div class="mipark-top">
+	      	   <div class="Headportrait">
+	      	   	 <img src="../img/h_logo.png">
+	      	   </div>
+	      	   <div class="wallet-mes" v-show="islogin" :data-id="id">
+	      	   	 <p><img src="../img/address.png"><span>钱包地址</span></p>
+	      	   	 <p>{{wallet}}</p>
+	      	   	 <p class="xia"><img src="../img/xin.png"><span>信用资产：<span>{{num}}</span></span></p>
+	      	   	 <p class="xia"><img src="../img/height.png"><span>区块高度：<span>{{block_height}}</span></span></p>
+	      	   </div>
+	      	   <div class="no-login" v-show="!islogin">
+	      	   	 <a id="openLogin">未登录</a>
+	      	   </div>
+		    </div>
+		</div>
+		<div class="park-nav" id="park-nav">
+			<a href="wallet.html" class="item-box" :data-wallet="wallet">
+				<span class="item-icon"><img src="../img/wdqb.png"></span>
+				<span class="item-title">我的钱包</span>
+			</a>
+			<a href="orderList.html" class="item-box">
+				<span class="item-icon"><img src="../img/dd.png"></span>
+				<span class="item-title">我的订单</span>
+			</a>
+			<a href="my_parking.html" class="item-box">
+				<span class="item-icon"><img src="../img/cw.png"></span>
+				<span class="item-title">我的车位</span>
+			</a>
+			<a id="line-distance" href="my_vehicle.html" class="item-box">
+				<span class="item-icon"><img src="../img/cl.png"></span>
+				<span class="item-title">车辆管理</span>
+			</a>
+			<a href="message.html" class="item-box">
+				<span class="item-icon">
+					<img src="../img/xx.png">
+					<span class="tip-num" v-show="t_num!=0&&t_num">{{t_num}}</span>
+				</span>
+				<span class="item-title">我的消息</span>
+			</a>
+			<a id="line-distance" href="userGuide.html" class="item-box">
+				<span class="item-icon"><img src="../img/zn.png"></span>
+				<span class="item-title">用户指南</span>
+			</a>
+			<a id="distance" href="setting.html" class="item-box">
+				<span class="item-icon"><img src="../img/xz.png"></span>
+				<span class="item-title">设置</span>
+			</a>
+		</div>
+	</div>
+	<script src="../js/immersed.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/mui.min.js"></script>
+	<script src="../js/app.js"></script>
+	<script type="text/javascript">
+		//当前激活选项
+		var activeTab = "template/my.html";
+		//选项卡点击事件
+		mui('.mui-bar-tab').on('tap', 'a', function(e) {
+			var targetTab = this.getAttribute('href');
+			if (targetTab == activeTab) {
+				return;
+			};
+			location.href = targetTab;
+		});
+		var vm = new Vue({
+			el:'.mui-content',
+			data:{
+				islogin:false,
+				userName:'用户名',
+				num:'0',
+				id:'',
+				wallet:'',
+				token:'',
+				t_num:'0',
+				block_height:''
+			},
+			methods:{
+				getUserInfo:function(){
+					var _this = this;
+					this.token = localStorage.getItem('token');
+					mui.ajax(AJAX_PATH+'/user/info?token='+this.token,{
+						type:'get',
+						dataType:'json',
+						success:function(res){
+							if(res.code == 200){
+								console.log(JSON.stringify(res))
+								_this.num = res.data.dcc_score;
+								_this.id = res.data.id;
+								_this.block_height = res.data.block_height;
+								_this.wallet = res.data.wallet;
+								localStorage.setItem('dccScore',res.data.dcc_score);
+							}else if(res.code==509){
+								localStorage.setItem('token',res.data.newToken);
+								_this.getUserInfo();
+							}
+						},
+						complete:function(xhr, status){
+							console.log('阻止触发全局的complete事件')
+						}
+					});
+				},
+				getUnreadMessage:function(){
+					var that = this;
+					this.token = localStorage.getItem('token');
+					mui.ajax(AJAX_PATH+'/msg/unread?token='+this.token,{
+						type:'get',
+						dataType:'json',
+						success:function(res){
+							if(res.code==200){
+								//获取未读条数
+								that.t_num = res.data;
+							}else if(res.code==509){
+								localStorage.setItem('token',res.data.newToken);
+								that.getUnreadMessage();
+							}
+						}
+					});
+				},
+				readData:function(){
+					var userName = localStorage.getItem('phone_number');
+					if(userName && userName!=""){
+						userName.replace(userName.substring(3, 8),'*****');
+						this.userName = userName;
+						this.islogin = true;
+						this.getUserInfo();
+						this.getUnreadMessage();
+					}else{
+						this.islogin = false;
+					};
+				}
+			}
+		});
+		vm.readData();
+	</script>
+    <script src="../js/my.js"></script>
+</body>
+</html>

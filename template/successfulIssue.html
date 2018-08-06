@@ -1,0 +1,61 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>发布成功</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="../css/app.css"/>
+		<link rel="stylesheet" href="../css/successfulBooking.css" />
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav header-bar">
+			<a class="mui-action-back  mui-pull-left back"><span class="mui-icon mui-icon-arrowleft" style="font-size: 35px; padding-top: 0;color:#292929;"></span></a>
+			<h1 class="mui-title">发布车位</h1>
+		</header>
+	    <div class="g-content box">
+	    	<div class="prompt">
+	    		<div>
+	    			<img src="../img/succe.png" alt="" />
+	    			<span>发布成功！</span>
+	    		</div>
+	    	</div>
+	    	<div class="operation">
+	    		<a id="returnhome">返回首页</a>
+	    		<a id="seeorder">查看放租列表</a>
+	    	</div>
+	    </div>
+		<script src="../js/mui.min.js"></script>
+		<script type="text/javascript">
+			mui.init();
+			mui.plusReady(function(){
+				ws = plus.webview.currentWebview();
+			})
+			document.getElementById('returnhome').addEventListener('tap',function(){
+				var wss = plus.webview.all();
+				var str = '';
+				for(var i=0;i<wss.length;i++){
+					str+=wss[i].id+'&';
+					if((wss[i].id.indexOf('HBuilder')==-1 && wss[i].id.indexOf('home')==-1)&&(wss[i].id.indexOf('template')==-1)){
+						wss[i].close();
+					};
+				};
+			})
+			document.getElementById('seeorder').addEventListener('tap',function(){
+				mui.openWindow({
+					url:'my_parking.html',
+					id:'my_parking.html',
+					styles:{
+						popGesture: "close",
+						statusbar:{
+							background:"#fff" 
+						}
+					}
+				})
+			})
+		</script>
+	</body>
+
+</html>

@@ -1,0 +1,97 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>我的消息</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../css/message.css" />
+		<script src="../js/vue.min.js"></script>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav header-bar" style="border-bottom:2px solid #f5f5f5">
+			<a class="mui-action-back  mui-pull-left back"><span class="mui-icon mui-icon-arrowleft" style="font-size: 35px; padding-top: 3px;color:#292929;"></span></a>
+		    <h1 class="mui-title">我的消息</h1>
+		</header>
+		<div class="mui-content g-content box" v-cloak>
+			<div v-show="items.length!=0">
+				<div class="list"  v-for="(item,index) in items">
+					<div class="time">{{item.created_at}}</div>
+					<div class="mui-card">
+						<div class="mui-card-header">{{item.title}}</div>
+						<div class="mui-card-content">
+							<div class="mui-card-content-inner">
+								{{item.alert}}
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="no_message" v-show="flag" >当前没有消息</div>
+		</div>
+		
+		<script src="../js/mui.min.js"></script>
+		<script src="../js/app.js"></script>
+		<script src="../js/jquery-1.11.2.min.js"></script>
+		<script type="text/javascript">
+			mui.init();
+			var token;
+			mui.plusReady(function(){
+				token = localStorage.getItem('token');
+				vm.getData();
+				vm.readMessage();
+			})
+			var vm = new Vue({
+				el:'.box',
+				data:{
+					items:[],
+					flag:false
+				},
+				methods:{
+					getData:function(){
+						var that = this;
+						mui.ajax(AJAX_PATH+'/msg/list?token='+token,{
+							type:'get',
+							dataType:'json',
+							success:function(res){
+								if(res.code==200){
+									console.log(JSON.stringify(res.data));
+									that.items = res.data;
+									if(res.data.length==0){
+										that.flag=true;
+									}else{
+										that.flag=false;
+									}
+								}else if(res.code==509){
+									that.getData();
+								}else if(res.code!=502 && res.code!=503){
+									mui.alert(res.msg,'系统提示','确定',null); 
+								};
+							}
+						})
+					},
+					readMessage:function(){
+						var _this = this;
+						mui.ajax(AJAX_PATH+'/msg/read_mark?token='+token,{
+							type:'post',
+							dataType:'json',
+							data:{
+							},
+							success:function(res){
+								console.log(JSON.stringify(res),33332222)
+								if(res.code==200){
+									var myo = plus.webview.currentWebview().opener();
+									mui.fire(myo,'getMessage');
+								}else if(res.code!=502 && res.code!=503){
+									mui.alert(res.msg,'系统提示','确定',null); 
+								}
+							}
+						});
+					}
+				}
+			})
+		</script>
+	</body>
+</html>

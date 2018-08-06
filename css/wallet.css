@@ -1,0 +1,63 @@
+.mui-icon {
+    font-size: 28px;
+    margin-top: 4px;
+    vertical-align: sub;
+    color: #b7b7b7;
+}
+.mui-title {
+    font-size: 18px;
+    color: #292929;
+    letter-spacing: 0;
+}
+body {
+	background-color: #f5f5f5;
+	height: 100%;
+}
+.balance  {
+	margin-top: 45px;
+	height: 130px;
+	background-color: #fff;
+	box-shadow: 0 2px 4px 0 rgba(0,0,0,0.08);
+}
+.balance  {
+	font-size: 12px;
+	color: #292929;
+	letter-spacing: 0;
+	padding:0 20px;
+}
+.balance span.num {
+	font-size: 36px;
+	color: #3883FD;
+	letter-spacing: 0;
+} 
+.balance .cuteWords {
+	display: block;
+	height: 40px;
+	line-height: 40px;
+}
+.balance .details {
+	color:#087CFD;
+}
+.balance .money {
+	height: 50px;
+	line-height: 50px;
+	text-align: center;
+}
+.withdraw {
+	margin-top: 12px;
+	height: 60px;
+	line-height: 60px;
+	font-size: 14px;
+	color: #333333;
+	letter-spacing: 0;
+	background-color: #fff;
+	padding-left: 20px;
+}
+.withdraw img {
+	vertical-align: middle;
+	width: 28px;
+	height: auto;
+}
+.withdraw .arrow {
+	margin-top: 15px;
+}

@@ -1,0 +1,147 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>登录</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="../css/app.css"/>
+		<link rel="stylesheet" href="../css/login.css" />
+	</head>
+	<body>
+		<header class="mui-bar mui-bar-nav header-bar">
+			<a class="mui-action-back  mui-pull-left back"><span class="mui-icon mui-icon-arrowleft" style="font-size: 35px; padding-top: 0;color:#292929;"></span></a>
+			<h1 class="mui-title">登录</h1>
+		</header>
+		
+		<div class="mui-content" id="login-box">
+			<div class="phone ban_con">
+				<label for="">手机号</label>
+				<input type="text" id="phone_number" pattern="[0-9]" maxlength="11"  placeholder="请输入手机号"/>
+				<span class="get_code">获取验证码</span>
+				<span class="seconds">重新获取<span class="num"></span>s</span>
+			</div>
+			<div class="ban_con verify_code">
+				<label for="">验证码</label>
+				<input type="text" pattern="[0-9]" id="code" placeholder="请输入验证码"/>
+			</div>
+			<p class="explain">手机号登录时代表您已同意<span id="openPro">《用户协议》</span></p>
+			<button type="button" class="submit">登 录</button>
+		</div>
+		<script src="../js/mui.min.js"></script>
+    	<script src="../js/app.js" type="text/javascript" charset="utf-8"></script>
+		<script>
+			mui.init();
+			var gpush=null;
+			function sendCode(){
+				if(countdown == 0){
+					seconds.style.display = 'none';
+					get_code.style.display = 'inline';
+					countdown = 60;
+					return;
+				}else{
+					mui('.num')[0].innerText = countdown;
+					countdown--;
+				}
+				setTimeout(function(){
+					sendCode()
+				},1000);
+			};
+			function validate_tel(num){
+				var pre = /^[1][3,4,5,7,8][0-9]{9}$/;
+				if(!pre.test(num)){
+					mui.alert('请输入正确的手机号','系统提示','确定',null);
+					return false;
+				};
+				return true;
+			}
+			var countdown = 60,seconds = mui('.seconds')[0],get_code = mui('.get_code')[0];
+			var ajaxsend_off = false,ajaxSubmit_off = false;
+			mui('#login-box').on('tap','.get_code',function(){
+				var phone_number = mui('#phone_number')[0].value;
+				console.log(phone_number)
+				return false;
+				if(!validate_tel(phone_number)){
+					return false;
+				};
+				if(!ajaxsend_off){
+					ajaxsend_off=true;
+					smsSend(phone_number,2,function(res,textStatus,xhr){
+						get_code.style.display = 'none';
+						seconds.style.display = 'inline';
+						sendCode();
+					},function(xhr,status){
+						ajaxsend_off = false;
+					});
+				};
+			});
+			mui('#login-box').on('tap','#openPro',function(){
+				mui.openWindow("protocol.html","protocol.html",{
+					styles:{
+						popGesture: "close",
+						statusbar:{
+							background:"#fff" 
+						}
+					}
+				});
+			});
+			mui('#login-box').on('tap','.submit',function(){
+				var code = mui('#code')[0].value;
+				var phone_number = mui('#phone_number')[0].value;
+				if(!validate_tel(phone_number)){
+					return false;
+				};
+				if(!/^\d{6}$/.test(code)){
+					mui.alert('请输入正确的验证码','系统提示','确定',null);
+					return false;
+				};
+				if(!ajaxSubmit_off){
+					var gpush = plus.push.getClientInfo();
+					var device = plus.os.name;
+					var cid = gpush.clientid;
+					if(cid==''|| cid==null){
+						console.log('未获取到clientid')
+						var _cid = localStorage.getItem('cid');
+						if(_cid!='' && _cid!=null){
+							cid = _cid;
+						};
+					}else if(cid=='' && cid==null){
+						localStorage.setItem('cid',cid);
+					};
+					ajaxSubmit_off = true;
+					mui.ajax(AJAX_PATH+'/auth/login',{
+						data:{
+							"phone_number":phone_number,
+							"code":code,
+							"device":device,
+							"cid":cid
+						},
+						dataType:'json',
+						type:'POST',
+						success:function(res,textStatus,xhr){
+							ajaxSubmit_off = false;
+							console.log(res);
+							if(res.code==200){
+								localStorage.setItem('phone_number',phone_number);
+								localStorage.setItem('token',res.data);
+								mui.toast('登陆成功');
+								//获取我的页面的窗口对象
+								var old = plus.webview.currentWebview().opener();
+								var my = plus.webview.getWebviewById('template/my.html');
+								mui.fire(old,'readData');
+								mui.fire(my,'readData');
+								//触发我的页面（readData）,从而进行数据刷新
+								mui.later(function(){
+									mui.back();
+								},'1500');
+							}else{
+								mui.alert(res.msg,'系统提示','确定',null);
+							};
+						}
+					});
+				};
+			});
+		</script>
+	</body>
+
+</html>

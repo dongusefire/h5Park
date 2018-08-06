@@ -1,0 +1,177 @@
+body {
+	background-color:#F5F5F5; 
+}
+img {
+	width: 100%;
+}
+.optional {
+	margin:12px 15px 0 0;
+	font-size: 15px;
+	color: #292929;;
+	z-index: 99999;
+}
+
+.mui-content {
+	background-color:#F5F5F5; 
+}
+.mui-backdrop {
+    position: fixed;
+    top: 44px;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 998;
+    background-color: rgba(0,0,0,.3);
+}
+.mui-title {
+	font-size: 18px;
+	color: #292929;
+	letter-spacing: 0;
+	right: 91px !important;
+    left: 91px !important;
+}
+.mui-bar {
+	background-color: #fff;
+}
+
+.picture {
+	width: 100%;
+	height: 195px;
+	/*background-image: url(../img/parkbackground.png);*/
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-position: center;
+}
+.siteInfo {
+	margin-top: -30px;	
+	width: 92%;
+	padding:18px 10px;
+	margin-left: 4%;
+	background-color: #fff;
+	box-shadow: 0 2px 4px 0 rgba(0,0,0,0.08);
+	border-radius: 8px;
+	z-index: 9999;
+	height: 112px;
+}
+.siteInfo .price {
+	color:#F25B57;
+	margin-left: 10px;
+}
+.siteInfo .name .big{
+	font-size: 18px;
+	color: #333333;
+	letter-spacing: 0;
+}
+.siteInfo .name {
+	font-size: 12px;
+	color: #000000;
+	letter-spacing: 0;
+	line-height: 17px;
+}
+.address img {
+	width: 10px;
+	height: 14px;
+	vertical-align: middle;
+}
+.address {
+	font-size: 14px;
+	color: #9B9B9B;
+	margin-top: 5px;
+}
+.siteInfo .num{
+	margin-bottom: 0;
+}
+.occupied {
+	font-size: 14px;
+	color: #000000;
+	letter-spacing: 0;
+	line-height: 20px;
+}
+.prompt {
+	margin:5px 15px 0 15px;
+}
+.prompt .tit {
+	margin-bottom: 6px;
+}
+.fee {
+	height: 50px;
+	position: fixed;
+	bottom: 0;
+	width: 100%;
+	line-height: 50px;
+	padding-left: 20px;
+	background-color: #fff;
+	border-top:1px solid #dcdcdc;
+}
+.fee .tcf {
+	font-size: 14px;
+	color: #9B9B9B;
+	letter-spacing: 0;
+}
+.fee .num {
+	font-size: 14px;
+	letter-spacing: 0;
+	line-height: 20px;
+}
+.fee .unit {
+	font-size: 14px;
+	letter-spacing: 0;
+	line-height: 20px;
+}
+.fee .reserve {
+	float:right;
+	border:none;
+	height: 50px;
+	color:#fff;
+	background-color: #3883FD;
+	border-radius: 0;
+	width: 35%;
+}
+.select-box {
+	margin:15px;
+}
+.select {
+	display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+	-webkit-box-pack: justify;
+    -webkit-justify-content: space-between;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+	padding:0 10px;
+	background-color: #fff;
+	height: 50px;
+	line-height: 50px;
+}
+.select-box .carNo{
+	background-color: #DDE3EB;
+}
+.select .label {
+	font-size: 14px;
+	color: #292929;
+	letter-spacing: 0;
+}
+.select  .details {
+	font-size: 16px;
+	color: #292929;
+	letter-spacing: 0;
+}
+.line {
+	background-color: #e8e8e8;
+	width: 96%;
+	margin-left: 2%;
+	height: 1px;
+}
+.select .time {
+	font-size: 13px;
+	color: #9B9B9B;
+	letter-spacing: 0;
+}
+.mui-icon {
+	font-size: 28px;
+	margin-top: 4px;
+	vertical-align: sub;
+	color:#b7b7b7;
+}
+

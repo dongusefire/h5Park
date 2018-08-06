@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>车场列表</title>
+    <link href="../css/mui.min.css" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" type="text/css" href="../css/app.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/parking.css"/>
+	<script src="../js/vue.min.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+	<header class="mui-bar mui-bar-nav header-bar">
+		<a class="mui-pull-left mui-action-back" id="hideView"><span class="mui-icon mui-icon-arrowleft" style="font-size: 35px; padding-top: 3px;color:#292929;"></span></a>
+	    <h1 class="mui-title">车场列表</h1>
+	</header>
+	<div class="mui-content g-content" v-cloak>
+		<div id="topbar">
+			<div id="search-box">
+				<div class="mui-input-row mui-search mui-active">
+				    <input type="search" v-model="keywords" @input="getParking()" placeholder="">
+				</div>
+			</div>
+			<div class="filter">
+				<span id="sort1">{{sort}}<i></i></span>
+				<!--<span>停车时长<i></i></span>-->
+			</div>
+		</div>
+		<div id="tab-box" :class="isSort? 'show-box':''">
+			<div class="tab-sort-group" :class="isSort? 'show':''">
+				<div class="sort1">
+					<ul class="mui-table-view mui-table-view-radio" id="sort">
+						<li class="mui-table-view-cell mui-selected" data-sort="distance">
+							<a class="mui-navigate-right">距离优先</a>
+						</li>
+						<li class="mui-table-view-cell" data-sort="price">
+							<a class="mui-navigate-right">价格最低</a>
+						</li>
+						<li class="mui-table-view-cell" data-sort="number">
+							<a class="mui-navigate-right">车位数量优先</a>
+						</li>
+					</ul>
+					<button class="mui-btn mui-btn-primary">确定</button>
+				</div>
+			</div>
+		</div>
+		<div id="parking-list" v-show="items.length!=0">
+			<div class="parkingList-mask" :style="isSort? 'display:block':'display:none'"></div>
+			<div class="parking" :id="index" v-for="(item,index) in items">
+				<div class="parking-l">
+					<div class="top">
+						<span class="name">{{item.parking_lot_name}}</span>
+						<span class="price"><span>{{item.price/100}}元</span>/小时</span>
+					</div>
+					<p class="address">{{item.parking_lot_address}}</p>
+					<div class="num">车位:<span>{{item.free_number}}</span>/{{item.number}}</div>
+				</div>
+				<div class="parking-r">
+					<div class="parking-img"><span class="goRoute" :id="index"></span></div>
+					<p>{{item.distance}}km</p>
+				</div>
+			</div>
+		</div>
+	</div>
+    <script src="../js/mui.min.js"></script>
+    <script type="text/javascript">
+    	mui.init();
+    	mui.plusReady(function(){
+    		var ws = plus.webview.currentWebview();
+    		vm.readData(ws.data,ws.point);
+    	});
+    	var vm = new Vue({
+			el:'.mui-content',
+			data:{
+				items:[],
+				page:1,
+				maxPage:1,
+				point:{
+					longitude:'',
+					latitude:''
+				},
+				keywords:'',
+				isSort:false,
+				sort:'智能排序',
+				sortValue:'distance',
+			},
+			methods:{
+				readData:function(res,point){ //初始化第一次的数据
+					for(var i=0;i<res.length;i++){
+						res[i].distance = (res[i].distance/1000).toFixed(3)
+					};
+					this.items = res;
+					this.point = point;
+				},
+				getParking:function(){
+					var _this= this;
+					mui.ajax(AJAX_PATH+'/parkinglot/search',{
+						data:{
+								"longitude":this.point.longitude,
+								"latitude":this.point.latitude,
+								"sort":this.sortValue,
+								"keywords":this.keywords
+						},
+						dataType:'json',
+						type:'POST',
+						success:function(res,textStatus,xhr){
+							if(res.code==200){
+								var _list = res.data.list;
+								for(var i=0;i<_list.length;i++){
+									_list[i].distance = (_list[i].distance/1000).toFixed(3)
+								};
+								_this.items = _list;
+							}else{
+								mui.alert(res.msg,'系统提示','确定',null);
+							};
+						}
+					});
+				}
+			}
+		});
+		window.addEventListener('readData',function(event){
+		  vm.readData(event.detail.data,event.detail.point);
+		});
+		mui('#parking-list').on('tap','.parking',function(e){
+			var id = this.getAttribute('id');
+			localStorage.setItem('parkingName',vm.items[id].parking_lot_name);
+			plus.webview.currentWebview().opener().evalJS('home.bespeak('+vm.items[id].parking_lot_number+')');
+			e.stopPropagation();
+		});
+		mui('#parking-list').on('tap','.goRoute',function(e){
+			var id = this.getAttribute('id');
+			localStorage.setItem('parking_lot_address',vm.items[id].parking_lot_address);
+			plus.webview.currentWebview().opener().evalJS('home.createRoute('+vm.items[id].longitude+','+vm.items[id].latitude+')');
+		    e.stopPropagation();
+		});
+		document.querySelector('#sort.mui-table-view-radio').addEventListener('selected',function(e){
+			vm.sortValue =e.detail.el.dataset.sort; 
+			vm.getParking();
+			vm.isSort = false;
+		});
+		document.getElementById('sort1').addEventListener('tap',function(e){
+			vm.isSort = !vm.isSort;
+			e.stopPropagation();
+		})
+		document.addEventListener('tap',function(){
+			vm.isSort = false;
+		})
+    </script>
+    <script src="../js/app.js" type="text/javascript" charset="utf-8"></script>
+    <!--<script src="../js/parking.js" type="text/javascript" charset="utf-8"></script>-->
+</body>
+</html>

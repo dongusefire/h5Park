@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>导航页</title>
+    <link href="../css/mui.min.css" rel="stylesheet" type="text/css"/>
+    <style type="text/css">
+    	* {
+    		margin:0;
+    		padding:0;
+    	}
+    	html,body {
+    		height:100%;
+    		width:100%;
+    	}
+    	.mui-slider,.mui-slider-group {
+    		height:100%;
+    		width:100%;
+    	}
+    	.mui-slider img {
+    		width:100%;
+    		height:100%;
+    		vertical-align: middle;
+    	}
+    	.mui-slider .mui-slider-item {
+    		position: relative;
+    	}
+    	.mui-slider .mui-slider-item #goto {
+    		position: absolute;
+    		left:0;
+    		right:0;
+    		bottom:10%;
+    		text-align: center;
+    	}
+    	.mui-slider .mui-slider-item #goto span {
+    		padding:10px 20px;
+    		font-size: 16px;
+    		color:#fff;
+    		border:1px #fff solid;
+    		border-radius: 5px;
+    	}
+    </style>
+</head>
+<body>
+	<div class="mui-slider">
+	  <div class="mui-slider-group">
+	    <div class="mui-slider-item"><img src="../img/guide-slide1.jpg" /></div>
+	    <div class="mui-slider-item"><img src="../img/guide-slide2.jpg" /></div>
+	    <div class="mui-slider-item"><img src="../img/guide-slide3.jpg" /><div id="goto"><span>点击进入</span></div></div>
+	  </div>
+	</div>
+    <script src="../js/mui.min.js"></script>
+    <script type="text/javascript">
+    	mui.init();
+    	mui.back = function() {};
+		mui.plusReady(function() {
+			if(mui.os.ios){
+				plus.navigator.setFullscreen(true);
+			}
+			plus.navigator.closeSplashscreen();
+		});
+    	mui('#goto').on('tap','span',function(){
+    		localStorage.setItem("lauchFlag", "true");
+    		plus.navigator.setFullscreen(false);
+			plus.webview.currentWebview().close();
+    	});
+    </script>
+</body>
+</html>

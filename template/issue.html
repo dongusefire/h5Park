@@ -1,0 +1,106 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="../css/app.css"/>
+		<link rel="stylesheet" href="../css/mui.picker.css" />
+		<link rel="stylesheet" href="../css/mui.poppicker.css" />
+		<link rel="stylesheet" href="../css/mui.picker.min.css" />
+		<link rel="stylesheet" href="../css/issue.css" />
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav header-bar" id="immersed-header">
+			<h1 class="mui-title">发布</h1>
+			<span class="mui-pull-right tolist">放租列表</span>
+		</header>
+		<nav class="mui-bar mui-bar-tab nav-tab-bar">
+		    <a class="mui-tab-item" href="/">
+		        <span class="mui-icon home"></span>
+		        <span class="mui-tab-label">预定</span>
+		    </a>
+		    <a class="mui-tab-item mui-active" href="template/issue.html" data-type="issue">
+		        <span class="mui-icon push"></span>
+		        <span class="mui-tab-label">发布</span>
+		    </a>
+		    <a class="mui-tab-item" href="template/my.html">
+		        <span class="mui-icon my"></span>
+		        <span class="mui-tab-label">我的</span>
+		    </a>
+		</nav>
+		<div class="mui-content g-content" id="immersed-content">
+			<div class="paaddSpace">
+				<div class="addSpace"><img src="../img/add_ld.png" alt="" />添加发布车位</div>
+				<div class="mySpace">
+					<div class="spaceName mui-pull-left" data-id=""></div>
+					<img src="../img/exchangeSpace.png" class="chooseSpace" />
+				</div>
+			</div>
+	        <div class="chooseDate">
+	        	<div class="row">
+	        		<span class="title">开始日期:</span>
+	        		<span class="startDate" data-options='{"type":"date"}'>选择开始日期</span>
+	        	</div>
+	        	<div class="row">
+	        		<span class="title">结束日期:</span>
+	        		<span class="endDate" data-options='{"type":"date"}'>选择结束日期</span>
+	        	</div>
+	        </div>
+	        <div class="chooseTime">
+	        	<div class="row mui-clearfix">
+	        		<span class="title mui-pull-left">发布时段:</span>
+	        		<div class="mui-pull-left time_box">
+	        			<span class="start_time with_circle">选择开始时间</span>
+		        		<span>至</span>
+		        		<span class="end_time with_circle">选择结束时间</span>
+	        		</div>
+	        	</div>
+	        </div>
+	        <div class="repeat">
+	        	<span class="title">重复:</span>
+	        	<ul class="week_day">
+	        		<li data-day="7">日</li>
+	        		<li data-day="1">一</li>
+	        		<li data-day="2">二</li>
+	        		<li data-day="3">三</li>
+	        		<li data-day="4">四</li>
+	        		<li data-day="5">五</li>
+	        		<li data-day="6">六</li>
+	        	</ul>
+	        </div>
+	        <div class="prompt">
+	        	<p class="title">温馨提示</p>
+	        	<span>1. 共享车位收益须按7:3比例与车场运营方进行分成。</span>
+	        	<span>2. 共享车位只能取消没有被预订的共享时段。</span>
+	        	<span>3. 发布时间只能按一种规律重复。</span>
+	        </div>
+	        <button class="issue">立即发布</button>
+		</div>
+		<script src="../js/immersed.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/mui.min.js"></script>
+		<script src="../js/mui.picker.js"></script>
+		<script src="../js/mui.poppicker.js"></script>
+		<script src="../js/mui.picker.min.js"></script>
+		<script src="../js/jquery-1.11.2.min.js"></script>
+		<script src="../js/app.js"></script>
+		<script src="../js/issue.js"></script>
+		<script type="text/javascript">
+	    	mui.init();
+			//当前激活选项
+			var activeTab = "template/issue.html";
+			//选项卡点击事件
+			mui('.mui-bar-tab').on('tap', 'a', function(e) {
+				var targetTab = this.getAttribute('href');
+				if (targetTab == activeTab) {
+					return;
+				};
+				location.href = targetTab;
+			});
+	    </script>
+	</body>
+
+</html>

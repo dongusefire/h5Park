@@ -1,0 +1,74 @@
+.mui-icon {
+    font-size: 28px;
+    margin-top: 4px;
+    vertical-align: sub;
+    color: #b7b7b7;
+}
+.mui-title {
+    font-size: 18px;
+    color: #292929;
+    letter-spacing: 0;
+}
+body {
+	background-color: #f5f5f5;
+	height: 100%;
+}
+.phone {
+	margin-top: 15px;
+}
+.ban_con {
+	height: 60px;
+	line-height: 60px;
+	background-color: #ffffff;
+}
+.ban_con label {
+	margin-left: 15px;
+	font-size: 14px;
+	color: #333333;
+	letter-spacing: 0;
+}
+.verify_code {
+	margin-top: 2px;
+}
+input[type=text] {
+	width: 54%;
+	border:none;
+	margin:0;
+	padding:0 0 0 10px;
+	font-size: 14px;
+}
+input::-webkit-input-placeholder {
+	font-size: 14px;
+	color: #9B9B9B;
+	letter-spacing: 0;
+}
+.explain {
+	margin:15px 0 0 12px;
+}
+.explain span {
+	font-size: 14px;
+	color: #3883FD;
+	letter-spacing: 0;
+	line-height: 20px;
+}
+.submit {
+	width: 94%;
+	border:none;
+	margin-left: 3%;
+	margin-top: 27px;
+	background-image: linear-gradient(-180deg, #53B9FF 0%, #087CFD 85%);
+	border-radius: 8px;
+	height: 54px;
+	color:#ffffff;
+	font-size: 16px;
+}
+.get_code {
+	font-size: 14px;
+	color: #3883FD;
+	letter-spacing: 0;
+}
+.seconds {
+	font-size: 14px;
+	display: none;
+	color: #9B9B9B;
+}

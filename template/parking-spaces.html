@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>车位列表</title>
+    <link href="../css/mui.min.css" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" type="text/css" href="../css/app.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/parking-spaces.css"/>
+    <script src="../js/vue.min.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+	<header class="mui-bar mui-bar-nav header-bar">
+		<a class="mui-pull-left mui-action-back" id="hideView"><span class="mui-icon mui-icon-arrowleft" style="font-size: 35px; padding-top: 3px;color:#292929;"></span></a>
+	    <h1 class="mui-title">车位列表</h1>
+	</header>
+	<div class="mui-content mui-main gj-content">
+		<!--<div class="filter">
+				<p class="Intell">智能排序<i></i></p>
+				<p class="self">共<span>4</span>个自选车位</p>
+		</div>-->
+		<div class="space-list">
+			
+		</div>
+	</div>
+    <script src="../js/mui.min.js"></script>
+    <script src="../js/jquery-1.11.2.min.js"></script>
+    <script src="../js/app.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		mui.init();
+		var html_ = '',floor_ = '',text1 = '', text2 = '';
+		var ws,token;
+    	mui.plusReady(function(){
+    		ws = plus.webview.currentWebview();
+    		token = localStorage.getItem('token');
+    		vm.getData(1);
+    	});
+		var vm = new Vue({
+			el:'.mui-content',
+			data:{
+				
+			},
+			methods:{
+				getData:function(num){
+					var _this = this;
+					var jsonData = {
+							"park_lot_num":ws.park_lot_num,
+							"p_b_num":ws.p_b_num,
+							"p_b_f":ws.p_b_floor,
+							"p_b_area":ws.p_b_area[0],
+							"page":num,
+							"size":20
+					};
+					mui.ajax(AJAX_PATH+'/parking/self/list?token='+token,{
+						data:jsonData,
+						dataType:'json',
+						type:'get',
+						success:function(res,textStatus,xhr){
+							if(res.code==200){
+								var park_info = res.data.parkInfo;
+								var list_data = res.data.parkSpaceList;
+								$.each(list_data ,function(key,value){
+									//开始结束时间的判断 
+									if(this.startTime.substr(0,10) == this.endTime.substr(0,10)){
+										endtime = this.endTime.substr(11,8);
+									}else{
+										endtime = this.endTime;
+									}
+									//停车场楼层的判断(待会改成线上数据)data 改为 jsonData    !!!!!!!!!
+									console.log(jsonData);
+									var floor = value.p_s_floor;
+									if(floor[0] != '0'){
+										text1 = '地下';
+									}
+									if(floor[2] == '1'){
+										text2 = '夹层' ;
+									}
+									floor_ = '<span>'+value.p_s_num+'栋'+text1+floor[1]+'层'+text2+value.p_s_area+'区'+value.p_s_sn+'号车位'+'</span>';
+									html_+= '<div class="bor_b">'+
+												'<div class="list-fire">'+
+													'<p class="par">'+park_info.parking_lot_name+'&nbsp;&nbsp;'+floor_+'</p>'+
+													'<p class="tim">共享时段：<span>'+value.startTime+'-'+endtime+'</span></p>'+
+													'<p class="price">'+(park_info.parking_lot_price/100)+
+													'<span>/小时</span>'+
+													'<span class="toOrder" data-num="'+park_info.parking_lot_number+'" data-psnum="'+value.p_s_sn+'"  data-id="'+value.id+'">去预定&nbsp;></span></p>'+
+												'</div>'+
+											'</div>';
+								});
+								$('.space-list').append(html_);
+								
+							}else if(res.code==509){
+								_this.getData(num);
+							}else if(res.code!=502 && res.code!=503){
+								mui.alert(res.msg,'系统提示','确定',null);
+							};
+						}
+					});
+					
+				},
+				
+			}
+			
+		})
+		//点击去预定
+		$('.space-list').on('click','.toOrder',function(){
+			var p_l_num = this.getAttribute('data-num'),space_id = this.getAttribute('data-id'),p_s_num = this.getAttribute('data-psnum');
+			var order = plus.webview.getWebviewById('order.html');
+			order.close();
+			setTimeout(function(){
+				mui.openWindow('order.html','order.html',{
+					styles:{
+						popGesture: "close",
+						statusbar:{
+							background:"#fff" 
+						}
+					},
+					extras:{
+						parking_lot_num:p_l_num,//停车场编号
+						park_space_id:space_id,//车位id
+						p_b_num:ws.p_b_num,//楼栋编号
+						p_b_f:ws.p_b_floor,//楼层编号
+						p_b_area:ws.p_b_area[0],//区域编号
+						p_s_num:p_s_num,
+						isSpaces:true
+					}
+				});
+			},500);
+			setTimeout(function(){
+				var Area = plus.webview.getWebviewById('parkingArea.html');
+				var Spaces = plus.webview.getWebviewById('parking-spaces.html');
+				Area.close();
+				Spaces.close();
+			},1000);
+//			mui.fire(order,'readData',{
+//				parking_lot_num:p_l_num,//停车场编号
+//				park_space_id:space_id,//车位id
+//				p_b_num:ws.p_b_num,//楼栋编号
+//				p_b_f:ws.p_b_floor,//楼层编号
+//				p_b_area:ws.p_b_area[0],//区域编号
+//				p_s_num:p_s_num,
+//				isSpaces:true
+//			});
+//			var order = plus.webview.getWebviewById('order.html');
+//			mui.fire(order,'reload');
+		})
+	</script>
+</body>
+</html>

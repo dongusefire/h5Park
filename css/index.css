@@ -1,0 +1,97 @@
+#home-box {
+	background: #fff;
+}
+#toolbar {
+	width:61px;
+}
+#toolbar span {
+	width:100%;
+	display: block;
+}
+#toolbar img {
+	width:100%;
+	height: auto;
+	display: block;
+}
+#map {
+	width: 100%;
+    position: fixed;
+	top:0;
+	right:0;
+	bottom:0;
+	left:0;
+	z-index: 2;
+}
+#parking-box {
+	position: relative;
+	margin: 5px;
+	max-height: 106px;
+	background: #FFFFFF;
+	-webkit-box-shadow: 0 0px 5px 0 #909090;
+	box-shadow: 0 0px 5px 0 #909090;
+	overflow: hidden;
+	border-radius:0 20px 20px 20px;
+}
+#parking-box .name {
+	width: 100%;
+	display: block;
+	max-width: 100%;
+}
+#parking-box .address {
+	background:initial;
+	text-indent: 0;
+}
+#parking-box .price {
+	margin-left: 0;
+	font-size: 16px;
+	color:#949494;
+}
+#parking-box .price span {
+	font-size: 16px;
+	color:#e67b85;
+}
+#parking-box .num {
+	color:#959595;
+}
+#account {
+	margin:5px;
+	background: #FFFFFF;
+	-webkit-box-shadow: 0 0px 5px 0 #909090;
+	box-shadow: 0 0px 5px 0 #909090;
+	overflow: hidden;
+	border-radius:10px;
+	color:#828282;
+	font-size: 14px;
+	padding:0 10px;
+}
+#account .account-info {
+	height: 30px;
+	position: relative;
+	border-bottom:1px #eee solid;
+}
+#account .account-info:last-child {
+	border:none;
+}
+#account .account-name {
+	width:105px;
+	height: 30px;
+	line-height: 30px;
+	float: left;
+}
+#account .account-address {
+	position: absolute;
+	left:105px;
+	right:130px;
+	height:30px;
+	line-height: 30px;
+	overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+#account .account-time {
+	width:130px;
+	height:30px;
+	text-align: right;
+	line-height: 30px;
+	float: right;
+}

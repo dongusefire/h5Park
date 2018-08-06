@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>订单详情</title>
+    <link href="../css/mui.min.css" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" type="text/css" href="../css/app.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/OrderDetails.css"/>
+    <style>
+    	 -webkit-tap-highlight-color:transparent;
+    </style>
+</head>
+<body>
+	<header class="mui-bar mui-bar-nav header-bar" style="border-bottom:2px solid #f5f5f5">
+		<a class="mui-action-back  mui-pull-left back"><span class="mui-icon mui-icon-arrowleft" style="font-size: 35px; padding-top: 3px;color:#292929;"></span></a>
+	    <h1 class="mui-title">订单详情</h1>
+	</header>
+	<div class="mui-content">
+		<div class="mui-main">
+			
+	    </div>
+	    <div class="Parking-Rate">
+	    </div>
+	    <div class="state-btn">
+	    </div>
+	</div>
+	<div class="Remarks">
+		<!--<p class="mark-o">备注：</p>
+		<p>这里是温备注内容这里是温备注内容这里是温备注内容这里是温备注内容这里是温备注内容</p>-->
+	</div>
+	  <script src="../js/jquery-1.11.2.min.js"></script>
+	  <script src="../js/mui.min.js"></script>
+	  <script src="../js/app.js"></script>
+		<script type="text/javascript">
+			var token,ws,park_id,order_num;
+			var timeFlag = true;
+			var nowTime = Date.parse(new Date());
+			mui.plusReady(function(){
+				token = localStorage.getItem('token');
+				ws = plus.webview.currentWebview();
+				park_id = ws.park_id;
+				order_num = ws.order_num;
+				readData(jQuery);
+			});
+			function readData($){
+					$('.state-btn p').click(function(){
+						$(this).addClass('active').siblings().removeClass('active');
+					});
+					var html_ = '';
+					var fixed = '';
+					var fee = '';
+					var manage = '';
+					getOrderDetail();
+					function getOrderDetail(){
+						mui.ajax(AJAX_PATH+'/user/order/detail?token='+token,{
+							type:'get',
+							dataType:'json',
+							data:{
+								"park_id":park_id,
+								"order_num":order_num
+							},
+							success:function(res){
+								if(res.code == 200){
+									//逻辑操作
+									var park_info = res.data.park_info;
+									var order_info = res.data.order_info;
+									var enter_time,leave_time;
+									//出入场时间判断
+									//入场时间
+									if(order_info.start_time&&order_info.start_time!=''){
+										start_t = timestampToTime(order_info.start_time);
+									}else{
+										start_t = '暂无数据';
+									}
+									//出场时间
+									if(order_info.end_time&&order_info.end_time!=''){
+										end_t = timestampToTime(order_info.end_time);
+									}else{
+										end_t = '暂无数据';
+									}
+									//时间标识,用当前时间和停车结束时间做比对，如果结束时间小于当前时间，则时间标识符为false
+									if((order_info.end_time*1000) < nowTime){
+										timeFlag = false;
+									}
+									//类型判断
+									if(order_info.flag == 'D'){
+										fixed = '固定'
+									}else if(order_info.flag == 'C'){
+										fixed = '不固定'
+									}
+									html_+= '<div class="mui-details">'+
+												'<div class="name" data-lat="'+park_info.latitude+'" data-lon="'+park_info.longitude+'">'+
+										    		'<span class="big">'+park_info.parking_lot_name+'</span>'+
+										    		'<a data-id="'+park_info.id+'" data-plnum="'+park_info.parking_lot_number+'"  class="price">车场详情&nbsp;></a>'+
+										    	'</div>'+
+										    	'<p class="address" data-address = "'+park_info.parking_lot_address+'"><img src="../img/Page1.png"/>'+park_info.parking_lot_address+'</p>'+
+										    	'<p class="num">车位： <span class="occupied">'+fixed+'</span>'+
+										    	'</p>'+
+											'</div>'+
+											'<div class="car-num">'+
+												'<p class="plate-num">车牌号：<span style="color:#666666">'+order_info.car_num+'</span></p>'+
+											'</div>'+
+											'<div class="park-time">'+
+												'<p class="time lower-time">'+
+													'<span class="state-time">下单时间:</span>'+
+													'<span class="date-time">'+order_info.submit_time+'</span>'+
+												'</p>'+
+												'<p class="time in-time">'+
+													'<span class="state-time">入场时间:</span>'+
+													'<span class="date-time"s>'+start_t+'</span>'+
+												'</p>'+
+												'<p class="time out-time">'+
+													'<span class="state-time">离场时间:</span>'+
+													'<span class="date-time">'+end_t+'</span>'+
+												'</p>'+
+											'</div>';
+										var bookFee = order_info.order_amount;
+										fee+= '<p class="park-rate">停车费:<span>'+(bookFee/100)+'元</span></p>';
+										//订单状态判断
+										if(timeFlag){
+											if(order_info.order_status==5||order_info.order_status==6||order_info.order_status==7||order_info.order_status==8){
+												manage+='';
+											}else if(order_info.order_status==1){
+												manage+='<p class="cancel">取消订单</p>'+
+														'<p class="Nav to_pay">支付</p>';
+											}else if(order_info.order_status==2){
+												manage+='<p class="cancel">取消订单</p>'+
+				    									'<p class="Nav goRoute">导航</p>';
+											}else if(order_info.order_status==4){
+												manage+='<p class="Nav to_pay">支付</p>';
+											}else if(order_info.order_status==3){
+												manage+='';
+											}
+										}else{
+											manage+='';
+										}
+										
+									//添加dom
+									$('.mui-main').append(html_);
+									$('.Parking-Rate').append(fee);
+									$('.state-btn').append(manage);
+							}else if(res.code==509){
+								getOrderDetail();
+							}else if(res.code!=502 && res.code!=503){
+								mui.alert(res.msg,'系统提示','确定',null);
+							};
+						}
+					})
+				};
+				//车场详情
+				$('.mui-main').on('tap','.price',function(){
+					var park_lot_num = $(this).attr('data-plnum');
+					var lat = $(this).parent().attr('data-lat');
+					var lon = $(this).parent().attr('data-lon');
+					mui.openWindow({
+						url:'siteDetails.html',
+						id:'siteDetails.html',
+						styles:{
+							popGesture: "close",
+							statusbar:{
+								background:"#fff" 
+							}
+						},
+						extras:{
+							park_lot_num:park_lot_num,
+							lat:lat,
+							lng:lon
+						}
+					})
+				});
+				//点击导航
+				mui('.state-btn').on('tap','.goRoute',function(e){
+					var boss = $(this).parents('.mui-content');
+					var dataCarrier1 = boss.find('.mui-details').children('.name'),dataCarrier2 = boss.find('.mui-details').children('.address');
+					var data_lat = dataCarrier1.attr('data-lat'),data_lng = dataCarrier1.attr('data-lon');
+					var address = dataCarrier2.attr('data-address');
+					localStorage.setItem('parking_lot_address',address);
+					plus.webview.getWebviewById('template/home.html').evalJS('home.createRoute('+data_lng+','+data_lat+')');
+				    e.stopPropagation();
+				});
+				//跳去支付
+				mui('.state-btn').on('tap','.to_pay',function(){
+					var options = {
+						styles:{
+							popGesture: "close",
+							statusbar:{
+								background:"#fff" 
+							}
+						},
+						extras:{
+							order_sn:order_num,
+							park_id:park_id
+						}
+					};
+					mui.openWindow("orderPay.html","orderPay.html",options);
+				});
+				
+			};
+			//时间戳转换为时间格式
+			function timestampToTime(timestamp) {
+				function p(s) {
+				    return s < 10 ? '0' + s: s;
+				}
+		        var date = new Date(timestamp * 1000);//时间戳为10位需*1000，时间戳为13位的话不需乘1000
+		        Y = date.getFullYear() + '-';
+		        M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
+		        D = date.getDate() + ' ';
+		        h = date.getHours() + ':';
+		        m = date.getMinutes();
+		        s = date.getSeconds();
+		        return Y+M+p(D)+p(h)+p(m);
+		   }
+		</script>
+	</body>
+
+</html>

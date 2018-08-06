@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+	    <meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<title>余额明细</title>
+		<link href="../css/mui.min.css" rel="stylesheet" type="text/css"/>
+		<link rel="stylesheet" type="text/css" href="../css/app.css"/>
+		<link rel="stylesheet" type="text/css" href="../css/balance.css"/>
+	    <script src="../js/vue.min.js"></script>
+	</head>
+	<body>
+		<header class="mui-bar mui-bar-nav header-bar">
+		    <a id="mui-icon-left"class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+		    <h1 class="mui-title title">余额明细</h1>
+		</header>
+		<div class="mui-content">
+			<ul class="mui-table-view balance-list" v-for="(item,index) in items">
+				<li class="mui-table-view-cell mui-media">
+					<a href="javascript:;">
+						<div class="price price1 mui-pull-right">{{item.u_profit/100}}<i>元</i></div>
+						<div class="mui-media-body">
+							<h4>{{item.p_s_sn}}</h4>
+							<p class="mui-ellipsis">{{item.profit_time}}</p>
+						</div>
+					</a>
+				</li>
+			</ul>
+		</div>
+	    <script src="../js/mui.min.js"></script>
+		<script src="../js/app.js"></script>
+		<script src="../js/jquery-1.11.2.min.js"></script>
+		<script type="text/javascript">
+			mui.init();
+			var token,ws;
+			mui.plusReady(function(){
+				token=localStorage.getItem('token');
+				ws=plus.webview.currentWebview();
+				vm.getDetail();
+			})
+			var vm=new Vue({
+				el:'.mui-content',
+				data:{
+					items:[],
+				},
+				methods:{
+					getDetail:function(){
+						var that=this;
+						mui.ajax(AJAX_PATH+'/profit/detail?token='+token,{
+							type:'get',
+							dataType:'json',
+							data:{},
+							success:function(res){
+								if(res.code==200){
+									console.log(res.data);
+									that.items=res.data;
+								}
+								else if(res.code==509){
+									that.getDetail();
+               				    } 
+               				    else if(res.code!=502 &&res.code!=503){
+									mui.alert(res.msg,'系统提示','确定',null);
+								}
+							}
+						})
+					},
+				}
+			})
+		</script>
+	</body>
+</html>

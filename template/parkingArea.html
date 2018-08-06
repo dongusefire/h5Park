@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>选择栋、层、区</title>
+    <link href="../css/mui.min.css" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" type="text/css" href="../css/app.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/my_vehicle.css"/>
+    <style type="text/css">
+    	.floor.nop {
+    		background-color: gray;
+    		color:#fff !important;
+    	}
+    </style>
+</head>
+<body>
+	<header class="mui-bar mui-bar-nav header-bar">
+		<a class="mui-action-back  mui-pull-left back"><span class="mui-icon mui-icon-arrowleft" style="font-size: 35px; padding-top: 3px;color:#292929;"></span></a>
+	    <h1 class="mui-title">停车场</h1>
+	</header>
+	<div class="mui-content g-content">
+		<div class="vehicle-list parkingArea"></div>
+	</div>
+    <script src="../js/mui.min.js"></script>
+    <script src="../js/app.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../js/jquery-1.11.2.min.js"></script>
+    <script>
+    	function init(){
+    		mui.init({
+	    		beforeback:function(){
+	    			var list = plus.webview.getWebviewById('order.html');
+	    			mui.fire(list,'alr');
+	    			return true;
+	    		}
+	    	});
+    	}
+    	mui.init();
+    	//获取创建当前窗口的webview对象
+		var ws,token,park_lot_num,park_lot_name,noSpace;
+		mui.plusReady(function(){
+    		//获取创建当前窗口的webview对象
+			ws = plus.webview.currentWebview();
+	    	token = localStorage.getItem('token');
+			park_lot_num = ws.parking_lot_num;
+			park_lot_name = ws.park_name? ws.park_name:localStorage.getItem('parkingName');
+			noSpace = ws.noSpace;
+			if(noSpace=='haveNo'){
+				init();
+			}
+	    	$('.mui-title').html(park_lot_name);
+	    	getData();
+    	});
+		
+    	function getData(){
+    		mui.ajax(AJAX_PATH+'/parking/self/positionInfo?token='+token,{
+	    		data:{
+	    			"park_lot_num":park_lot_num
+	    		},
+	    		type:'get',
+	    		dataType:'json',
+	    		success:function(res){
+	    			if(res.code==200){
+	    				console.log(JSON.stringify(res));
+	    				var data = res.data.park_bf_info;
+		    			for(var i in data){
+		    				var list_ ='';
+		    				$.each(data[i],function(key,value){
+		    					var text = '地上';
+		    					var text2 = '';
+		    					if(value!=''&&value){
+		    						if(value[0]!='0'){
+		    						text = '地下'; 
+			    					};
+			    					if(value[2]==1){
+			    						text2 = '夹层' 
+			    					};
+			    					list_ += '<span data-floor="'+value+'" class="floor goList">'+text+value[1]+'层'+text2+'</span>';
+		    					}else{
+		    						list_ += '<span class="floor nop">无可用车位</span>';
+		    					}
+		    				});
+		    				var _html = '<div class="vehicle-box">'+
+		    							'<div class="vehicle-tbar">'+
+										'<span class="mui-left parking-name">'+i+'栋</span>'+
+										'</div>'+
+										'<div class="vehicle-b" data-build="'+i+'">'+list_+
+										'</div>'+
+										'</div>';
+							$('.parkingArea').append(_html);
+							//设置数据
+		    			}
+	    			}else if(res.code==509){
+						getData();
+					}else if(res.code!=502 && res.code!=503){
+						mui.alert(res.msg,'系统提示','确定',null);
+					};
+	    		}
+	    	})
+    	};
+    	
+    	
+    	function positionInfo2(floor,vehicle_b,build){
+    		//数据请求
+			mui.ajax(AJAX_PATH+'/parking/self/positionInfo?token='+token,{
+		    		data:{
+		    			"park_lot_num":park_lot_num,
+		    			"p_b_num":build,
+		    			"p_b_floor":floor
+		    		},
+		    		type:'get',
+		    		dataType:'json',
+		    		success:function(res){
+		    			if(res.code==509){
+							positionInfo2(floor,vehicle_b,build);
+							return false;
+						};
+		    			//设置信息，带到下一个页面的信息有停车场编号，p_b_num,p_b_floor,p_b_area,
+		    			var p_b_area = [];
+		    			for(var item in res.data.park_bf_info){
+		    				p_b_area.push(item);
+		    			};
+		    			mui.openWindow({
+		    				url:"parking-spaces.html",
+		    				id:"parking-spaces.html",
+		    				styles:{
+								popGesture: "close",
+								statusbar:{
+									background:"#fff" 
+								}
+							},
+		    				extras:{
+		    					p_b_num:build,
+		    					p_b_floor:floor,
+		    					park_lot_num:park_lot_num,
+		    					p_b_area:p_b_area
+		    				}
+		    			})
+		    		}
+		    });
+    	};
+    	$('.parkingArea').on('click','.goList',function(){
+    		//获取楼层信息
+    		var floor = this.getAttribute('data-floor');
+    		var vehicle_b = this.parentNode;
+    		//获取楼栋信息
+    		var build = vehicle_b.getAttribute('data-build');
+    		positionInfo2(floor,vehicle_b,build);
+		})
+    </script>
+</body>
+</html>

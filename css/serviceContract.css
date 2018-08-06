@@ -1,0 +1,23 @@
+body {
+	background-color:#F5F5F5; 
+}
+.mui-content {
+	background-color:#F5F5F5; 
+}
+.mui-title {
+	font-size: 18px;
+	color: #292929;
+	letter-spacing: 0;
+	right: 91px !important;
+    left: 91px !important;
+}
+.mui-bar {
+	background-color: #fff;
+}
+.main-title {
+	text-align: center;
+	margin:30px 0 20px 0;
+}
+.box {
+	padding:0 12px;
+}

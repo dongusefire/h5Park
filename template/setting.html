@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>设置</title>
+    <link href="../css/mui.min.css" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" type="text/css" href="../css/app.css"/>
+    <style>
+    	.edi .ver{
+    		text-align: center;
+    	}
+    	.edi p{
+    		font-size:14px;
+    		color:#333;
+    	}
+    	.edi .photo{
+    		 width: 100px;
+		     height: 100px;
+		     display: table-cell;
+		    }
+    	.edi .photo img{
+    		width: 100px;
+		    height: 100px;
+    		margin: 0 auto;
+    		position: absolute;  
+    		top:0;
+    		left:0;
+    		bottom:0;
+    		right:0;
+    	}
+    	.edi .introduce{
+    		width:87%;
+    		margin:0 auto;
+    	}
+    	.servation{
+    		position:relative;
+    		top:150px;
+    		left: 0;
+    	}
+    	.servation .clear{
+    		background: none;
+    		text-align: center;
+    		width:92%;
+    		height:46px;
+    		margin:0 auto;
+    		background: #fff;
+    	}
+    	.servation .clear:before{
+    		content: initial;
+    	}
+    	.servation .clear:after{
+    		content: initial;
+    	}
+    	.servation .logout{
+    		width:92%;
+    		height:46px;
+    		margin:0 auto;
+    		margin-top:10px;
+    	}
+    	.servation .logout button{
+    		line-height:15px;
+    		text-align: center;    		
+    	}
+    	
+    </style>
+</head>
+<body>
+	<header class="mui-bar mui-bar-nav header-bar">
+		<a class="mui-action-back  mui-pull-left back"><span class="mui-icon mui-icon-arrowleft" style="font-size: 35px; padding-top: 3px;color:#292929;"></span></a>
+	    <h1 class="mui-title">设置</h1>
+	</header>
+	<div class="mui-content g-content">
+		<div class="edi">
+			<p class="photo"><img src="../img/edi.png"></p>
+			<p class="ver">Version <span id="v"></span></p>
+			<p class="introduce">易惠停是一款应用区块链技术打造的停车服务APP。为用户提供公开可信的预约服务，用户也可将自己的闲置车位共享，获取收益，参与缓解停车难问题。</p>
+		</div>
+		<div class="servation">
+			<ul class="mui-table-view clear">
+		       <li class="mui-table-view-cell" id="clear">清除缓存</li>
+		   </ul>
+			<div class="logout" style="display:none;">
+				<button type="button" class="mui-btn mui-btn-danger mui-btn-block">退出登录</button>
+			</div>
+		</div>
+		<!--<div class="ceshi">
+			<button type="button" class="mui-btn mui-btn-primary" id="notice">发送通知</button>
+		</div>-->
+		<!--<div class="paytest">
+			<button type="button" class="mui-btn mui-btn-primary" id="openPayView">打开网络页面</button>
+		</div>-->
+	</div>
+    <script src="../js/mui.min.js"></script>
+    <script src="../js/app.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript">
+    	function upwo(){ //更新父页面的数据
+    		//获取我的页面的窗口对象
+    		var wo = plus.webview.currentWebview().opener();
+			//触发我的页面（readData）,从而进行数据刷新
+			mui.fire(wo,'readData');
+    	};
+    	var login_off = false,token = null;
+    	mui.plusReady(function(){
+    		token=localStorage.getItem('token');
+    		if(token){
+    			mui('.logout')[0].style.display = 'block';
+    		};
+    		mui('#v')[0].innerHTML = plus.runtime.version;
+    	});
+    	mui('.g-content').on('tap','#clear',function(){
+			localStorage.clear();
+			localStorage.removeItem('search');
+			mui.toast("已清除");
+    	});
+    	mui('.g-content').on('tap','#notice',function(){
+			app.requireNotiMsg('我是离线消息2')
+    	});
+    	mui('.g-content').on('tap','#openPayView',function(){
+    		var options = {
+				styles:{
+					titleNView:{
+						buttons:[
+							{
+								color:'#292929',
+								colorPressed:'#292929',
+								float:'left',
+								text:'关闭',
+								fontSize:'16px'
+							}
+						],
+						backgroundColor:'#f7f7f7',
+						titleText:'测试网络页面',
+						splitLine: {
+							color: '#cccccc'
+						}
+					},
+					popGesture:'none',
+					backButtonAutoControl:'none',
+					additionalHttpHeaders:{
+						"Referer":"http://www.ecosysnet.com/"
+					}
+				},
+				show:{
+					event:'loaded'
+				},
+				waiting:{
+					autoShow:false
+				}
+			};
+			mui.openWindow("https://www.baidu.com/","https://www.baidu.com/",options);
+    	});
+    	mui('.g-content').on('tap','.logout',function(){
+    		var _this = this;
+    		if(!login_off){
+    			setTimeout(function(){
+    				localStorage.removeItem('phone_number');
+    				localStorage.removeItem('token');
+    				upwo();
+    				login_off = false;
+    				_this.style.display = 'none';
+    				mui.toast('退出成功');
+    			},500);
+    			mui.ajax(AJAX_PATH+'/auth/logout?token='+token,{
+					dataType:'json',
+					type:'get',
+					success:function(res,textStatus,xhr){
+//						if(res.code==200){
+//							mui.toast(res.msg);
+//						};
+					},
+					complete:function(xhr, status){
+						login_off = false;
+					}
+				});
+    		};
+    	});
+    </script>
+</body>
+</html>

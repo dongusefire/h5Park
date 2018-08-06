@@ -1,0 +1,152 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>新增车位</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+	<link href="../css/mui.min.css" rel="stylesheet" />
+	<link rel="stylesheet" type="text/css" href="../css/mui.picker.min.css"/>
+	<link rel="stylesheet" type="text/css" href="../css/app.css"/>
+	<link rel="stylesheet" href="../css/newParkSpace.css" />
+</head>
+<body>
+	<header class="mui-bar mui-bar-nav header-bar">
+		<a class="mui-action-back mui-pull-left back"><span class="mui-icon mui-icon-arrowleft" style="font-size: 35px; padding-top: 0;color:#292929;"></span></a>
+		<h1 class="mui-title">新增车位</h1>
+	</header>
+	<div class="mui-content g-content">
+		<p class="annotation">注：您所填写信息仅用于验证，惠停车不会透露给第三方。</p>
+		<div class="withdraw mui-clearfix withborder" id="openChooseParkSpace">
+			<label class="parkName">选择车场</label>
+			<span class="mui-icon mui-icon-arrowright mui-pull-right arrow"></span>
+		</div>
+		<p class="annotation">请输入车位所属信息</p>
+		<div class="form-item parkInfo">
+			<div class="input-item">
+		    	<label class="item-label">楼栋位置</label>
+		    	<div class="item-content">
+		    		<input type="text" name="p_s_num" class="input-change" pattern="[A-Ba-z0-9]" placeholder="例如:A1、E2" />
+		    	</div>
+		    </div>
+		    <div class="input-item" style="display:none;">
+		    	<label class="item-label">是否为地下</label>
+		    	<div class="item-content">
+		    		<div class="mui-switch mui-switch-blue mui-switch-mini floorSwitch" id="zf">
+					  <div class="mui-switch-handle"></div>
+					</div>
+		    	</div>
+		    </div>
+		    <div class="input-item">
+		    	<label class="item-label">楼层位置</label>
+		    	<div class="item-content">
+		    		<input type="text" name="p_s_f" placeholder="请选择楼层位置" id="p_s_f" readonly="readonly" />
+		    	</div>
+		    </div>
+		    <div class="input-item">
+		    	<label class="item-label">是否为夹层</label>
+		    	<div class="item-content">
+		    		<div class="mui-switch mui-switch-blue mui-switch-mini floorSwitch" id="jc">
+					  <div class="mui-switch-handle"></div>
+					</div>
+		    	</div>
+		    </div>
+		    <div class="input-item">
+		    	<label class="item-label">层区编号</label>
+		    	<div class="item-content">
+		    		<input type="text" name="p_s_area" class="input-change" maxlength="2" placeholder="请输入层区如01区" pattern="[A-Ba-z0-9]"  />
+		    	</div>
+		    </div>
+		    <div class="input-item">
+		    	<label class="item-label">车位编号</label>
+		    	<div class="item-content">
+		    		<input type="text" name="p_s_sn" placeholder="请输入四位车位编号如0001" class="input-change" maxlength="4" pattern="[0-9]" />
+		    	</div>
+		    </div>
+		    <!--<div class="input-item">
+		    	<label class="item-label">车位长度</label>
+		    	<div class="item-content">
+		    		<span class="min-inputbox"><input type="text" pattern="[0-9.]" name="p_s_length" class="min-input input-change" /></span><span>米</span>
+		    	</div>
+		    </div>
+		    <div class="input-item">
+		    	<label class="item-label">车位宽度</label>
+		    	<div class="item-content">
+		    		<span class="min-inputbox"><input type="text" pattern="[0-9.]" name="p_s_width" class="min-input input-change" /></span><span>米</span>
+		    	</div>
+		    </div>-->
+		    <div class="input-item">
+		    	<label class="item-label">共享截至日期</label>
+		    	<div class="item-content">
+		    		<input type="text" name="valid_time" placeholder="请设置共享截至日期" id="valid_time" readonly="readonly" />
+		    	</div>
+		    </div>
+		    <div class="input-item">
+		    	<label class="item-label">权属类型</label>
+		    	<div class="item-content check">
+		    		<div class="radio-inner">
+			            <input type="radio" name="nature" value="1" checked="checked">
+			            <div class="user-defined" id="owner">
+			                <span class="circle"></span>
+			                <span>个人租赁</span>
+			            </div>
+			        </div>
+			        <div class="radio-inner">
+			            <input type="radio" name="nature" value="2" />
+			            <div class="user-defined" id="rent">
+			                <span class="circle"></span>
+			                <span>个人权属</span>
+			            </div>
+			        </div>
+		    	</div>
+		    </div>
+		</div>
+		<div class="picture">
+			<label>证明材料</label>
+			<div class="addPic mui-clearfix">
+				<div class="add">
+					<div id="pImg" class="upload-box">
+						<div class="upload-fileInfo">
+							<div class="img-box"></div>
+							<!--<span class="mui-icon mui-icon-closeempty"></span>-->
+						</div>
+						<div class="file-box upfileBtn" id="upPBtn"></div>
+					</div>
+					<span class="tip">添加车位照片</span>
+				</div>
+				<div class="add">
+					<div id="cardImg" class="upload-box">
+						<div class="upload-fileInfo">
+							<div class="img-box"></div>
+						</div>
+						<div class="file-box upfileBtn" id="upCardBtn"></div>
+					</div>
+					<span class="tip">添加身份证正反面照片</span>
+				</div>
+				<div class="add">
+					<div id="fileImg" class="upload-box">
+						<div class="upload-fileInfo">
+							<div class="img-box"></div>
+						</div>
+						<div class="file-box upfileBtn" id="upFileBtn"></div>
+					</div>
+					<span class="tip">添加车位产权证明</span>
+				</div>
+			</div>
+		</div>
+		<div class="reminder">
+			<h6>温馨提示</h6>
+			<p>1. 如果您的车位编号不足4位,请在前面补0。</p>
+			<p>2. 如果您是车位的所有者，请选择“个人权属”，如果您是租用车位，请选择“个人租赁”。</p>
+			<p>3. 为了确保您车位审核通过，请您提交正确的车位信息与材料。</p>
+			<p>4. 车位审核通过后，在共享截至日期内可自由分享车位。</p>
+		</div>
+		<button type="submit" class="submit" id="spaceAdd">提 交</button>
+	</div>
+	<script src="../js/mui.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/mui.picker.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/app.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/jquery-1.11.2.min.js"></script>
+	<script src="../js/webuploader/webuploader.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/newParkSpace.js" type="text/javascript" charset="utf-8"></script>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>首页</title>
+    <link href="../css/mui.min.css" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" type="text/css" href="../css/app.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/search.css"/>
+    <script src="../js/vue.min.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+	<header class="mui-bar mui-bar-nav header-bar">
+		<a class="mui-action-back  mui-pull-left back"><span class="mui-icon mui-icon-arrowleft" style="font-size: 35px; padding-top: 3px;color:#292929;"></span></a>
+	    <h1 class="mui-title">
+	    	<div class="search-box">
+	    		<div class="mui-input-row mui-search mui-active">
+				    <input type="search" class="mui-input-clear" id="search-input" placeholder="">
+				</div>
+	    	</div>
+	    </h1>
+	</header>
+	<div class="mui-content g-content" v-cloak>
+		<div class="tab-box" v-show="tabIndex==0">
+			<div class="search-title">历史搜索</div>	
+			<div class="records" v-show="searchList.length!=0">
+				<span class="his" v-for="search in searchList" @click="setSearch(search)">{{search}}</span>
+			</div>
+			<div class="search-null" v-show="searchList.length==0">暂无记录</div>
+		</div>
+		<div class="tab-box" v-show="tabIndex!=0">
+			<div class="search-title">搜索结果</div>
+			<div class="search-list" v-show="items.length!=0">
+				<div class="parking" v-for="(item,index) in items" :id="index">
+					<div class="parking-l">
+						<div class="top">
+							<span class="name">{{item.parking_lot_name}}</span>
+						</div>
+						<p class="address">{{item.parking_lot_address}}</p>
+					</div>
+					<div class="parking-r">
+						<div class="parking-img"><span class="goRoute" :id="index"></span></div>
+						<p>{{item.distance}}km</p>
+					</div>
+				</div>
+			</div>
+			<div class="search-null" v-show="items.length==0">暂无车场</div>
+		</div>
+	</div>
+    <script src="../js/mui.min.js"></script>
+    <script src="../js/app.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../js/jquery-1.11.2.min.js"></script>
+    <script src="../js/search.js" type="text/javascript" charset="utf-8"></script>
+</body>
+</html>
