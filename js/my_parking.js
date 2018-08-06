@@ -75,6 +75,4 @@ var myParking = {
 		this.bindeEvent();
 	}
 }
-mui.plusReady(function(){
-	myParking.init();
-})
+myParking.init();

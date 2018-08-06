@@ -39,12 +39,12 @@
 		<script src="../js/app.js"></script>
 		<script type="text/javascript">
 			mui.init();
-			var ws='',token;
-			mui.plusReady(function(){
-				ws = plus.webview.currentWebview();
+			var ws='',params,token;
+			window.onload = function(){
 				token= localStorage.getItem('token');
+				params = app.getRequest();
 				vm.getData();
-			});
+			}
 			var vm = new Vue({
 				el:'.box',
 				data:{
@@ -60,7 +60,7 @@
 						var that = this;
 						mui.ajax(AJAX_PATH+'/parking/time_list?token='+token,{
 							data:{
-								'park_lot_num':ws.park_lot_num
+								'park_lot_num':params.park_lot_num
 							},
 							type:'get',
 							dataType:'json',
@@ -93,11 +93,11 @@
 			});
 			
 			//调用导航
-			mui('.box').on('tap','.guide',function(e){
-				localStorage.setItem('parking_lot_address',vm.p_address);
-				plus.webview.getWebviewById('template/home.html').evalJS('home.createRoute('+ws.lng+','+ws.lat+')');
-			    e.stopPropagation();
-			})
+//			mui('.box').on('tap','.guide',function(e){
+//				localStorage.setItem('parking_lot_address',vm.p_address);
+//				plus.webview.getWebviewById('template/home.html').evalJS('home.createRoute('+ws.lng+','+ws.lat+')');
+//			    e.stopPropagation();
+//			})
 		</script>
 	</body>
 

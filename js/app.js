@@ -32,7 +32,7 @@ var app = {
 function smsSend(phone,type,resCallback,completeCallback){
 	mui.ajax(AJAX_PATH+'/sms/send',{
 		data:{
-			"phone_number":phone, //手机号
+			"phone_number":phone, //手机号 
 			"code_type":type //验证码类型|必须    （1-注册，2-登录，3-添加车辆，4-提现）
 		},
 		dataType:'json',

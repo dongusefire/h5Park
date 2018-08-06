@@ -82,6 +82,7 @@ input[type=search] {
 	font-size: 10px;
 	color: #292929;
 	border-top:1px #ededed solid;
+	z-index: 999;
 }
 .nav-tab-bar.mui-bar-tab a {
 	display: table-cell;

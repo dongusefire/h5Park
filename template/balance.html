@@ -17,7 +17,7 @@
 		    <h1 class="mui-title title">余额明细</h1>
 		</header>
 		<div class="mui-content">
-			<ul class="mui-table-view balance-list" v-for="(item,index) in items">
+			<ul class="mui-table-view balance-list"  v-for="(item,index) in items" >
 				<li class="mui-table-view-cell mui-media">
 					<a href="javascript:;">
 						<div class="price price1 mui-pull-right">{{item.u_profit/100}}<i>元</i></div>
@@ -29,17 +29,17 @@
 				</li>
 			</ul>
 		</div>
+		
 	    <script src="../js/mui.min.js"></script>
 		<script src="../js/app.js"></script>
 		<script src="../js/jquery-1.11.2.min.js"></script>
 		<script type="text/javascript">
 			mui.init();
-			var token,ws;
-			mui.plusReady(function(){
+			var token;
+			window.onload=function(){
 				token=localStorage.getItem('token');
-				ws=plus.webview.currentWebview();
 				vm.getDetail();
-			})
+			}
 			var vm=new Vue({
 				el:'.mui-content',
 				data:{
@@ -55,7 +55,12 @@
 							success:function(res){
 								if(res.code==200){
 									console.log(res.data);
-									that.items=res.data;
+									if(res.data.length==0){
+										var html_ = '<div style="margin-top:50px;font-size:14px;text-align:center;color:#9ea1ac;">您暂无账单明细</div>';
+										$('.mui-content').html(html_);
+									}else{
+										that.items=res.data;
+									}
 								}
 								else if(res.code==509){
 									that.getDetail();

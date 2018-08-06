@@ -23,15 +23,15 @@ var issue = {
 							mui.trigger(mui('.addSpace')[0],'tap');
 						});
 						//数据为空，跳转到添加车位页面
-						jQuery(".mySpace").css('display','none');
-						jQuery(".addSpace").css('display','block');
+						Zepto(".mySpace").css('display','none');
+						Zepto(".addSpace").css('display','block');
 						//此处加判断出问题，需要在点击发布的时候做判断
 					}else{
-						jQuery(".mySpace").css('display','block');
-						jQuery(".addSpace").css('display','none');
+						Zepto(".mySpace").css('display','block');
+						Zepto(".addSpace").css('display','none');
 						//处理车位数据填充到页面
 						var space_arr = [],space_arr_checking = [],space_arr_failed = [];
-						jQuery.each(spaceData,function(key,value){
+						Zepto.each(spaceData,function(key,value){
 							//循环遍历数组，取status为2的车位信息才可以发布
 							if(this.status==2){
 								space_arr.push(this);
@@ -44,9 +44,9 @@ var issue = {
 						});
 						//筛选出来的可发布车位继续进行循环
 						if(space_arr.length!=0){
-							jQuery.each(space_arr,function(key2,value2){
-								jQuery(".spaceName").html(space_arr[0].parking_lot_name);
-								jQuery(".spaceName").attr('data-id',space_arr[0].id);
+							Zepto.each(space_arr,function(key2,value2){
+								Zepto(".spaceName").html(space_arr[0].parking_lot_name);
+								Zepto(".spaceName").attr('data-id',space_arr[0].id);
 							})
 						}else{
 							if(space_arr_checking.length!=0&&space_arr_failed.length==0){
@@ -124,7 +124,7 @@ var issue = {
 	bindEvent:function(){
 		var _this = this;
 		$('.week_day').on('tap','li',function(){
-			jQuery(this).toggleClass('active');
+			Zepto(this).toggleClass('active');
 		});
 		mui('.chooseDate').on('tap','.startDate',function() {
 			var _self = this;
@@ -246,7 +246,7 @@ var issue = {
 				console.log(mapResult.toString());
 			}else{
 				var day = $(this).attr('data-day');
-				var index = jQuery.inArray(day,p_week);
+				var index = Zepto.inArray(day,p_week);
 				p_week.splice(index,1);
 				mapResult = p_week.map(function(item,index,array){
 					return item-0;
@@ -255,11 +255,11 @@ var issue = {
 			}
 		});
 		mui('.mui-content').on('tap','.issue',function(){
-			var data_start_date = jQuery(".startDate").html();
-			var data_end_date = jQuery(".endDate").html();
-			var data_start_time = jQuery(".start_time").html();
-			var data_end_time = jQuery(".end_time").html();
-			var id = jQuery(".spaceName").attr('data-id');
+			var data_start_date = Zepto(".startDate").html();
+			var data_end_date = Zepto(".endDate").html();
+			var data_start_time = Zepto(".start_time").html();
+			var data_end_time = Zepto(".end_time").html();
+			var id = Zepto(".spaceName").attr('data-id');
 			var dataStartDate = data_start_date+' '+data_start_time;
 			dataStartDate = new Date(dataStartDate.replace(/-/g,"/"));
 			if(data_start_date=='选择开始日期'||data_end_date=='选择结束日期'){
@@ -298,7 +298,7 @@ var issue = {
 			if(!ajax_submit){
 				ajax_submit = true;
 				token = localStorage.getItem('token');
-				plus.nativeUI.showWaiting();
+//				plus.nativeUI.showWaiting();
 				mask.show();//显示遮罩
 				mui.ajax(AJAX_PATH+'/user/park/space/release?token='+token,{
 					type:'post',
@@ -306,7 +306,7 @@ var issue = {
 					data:JSON.stringify(jsonData),
 					success:function(res){
 						ajax_submit = false;
-						plus.nativeUI.closeWaiting();
+//						plus.nativeUI.closeWaiting();
 						mask.close();//关闭遮罩层
 						if(res.code==200){
 							console.log('发布成功!');
@@ -328,7 +328,7 @@ var issue = {
 			app.addRoute('rentList.html');
 		});
 		//车位拾取器的处理
-		var spaceName = jQuery(".spaceName");
+		var spaceName = Zepto(".spaceName");
 		mui(".mySpace").on('tap','.chooseSpace',function(event){
 			_this.spacePicker.show(function(items){
 				spaceName.html(items[0].text);
@@ -339,7 +339,7 @@ var issue = {
 	init:function(){
 		var token = localStorage.getItem('token');
 		if(token && token!=''){
-			_this.getCarSpace();
+			this.getCarSpace();
 		}else{
 			login('请先登录');
 		};
