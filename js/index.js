@@ -1,8 +1,55 @@
 mui.init();
+//添加自定义控件，案例地址：http://lbsyun.baidu.com/jsdemo.htm#b0_6
+// 定义一个工具栏控件
+function toolbar(){
+	// 默认停靠位置和偏移量
+	this.defaultAnchor = BMAP_ANCHOR_BOTTOM_RIGHT;
+	this.defaultOffset = new BMap.Size(10, 116); //x,y
+};
+toolbar.prototype = new BMap.Control();
+toolbar.prototype.initialize = function(map){
+	var dom = mui('#toolbar')[0];
+	// 添加DOM元素到地图中
+	map.getContainer().appendChild(dom);
+	// 将DOM元素返回
+	return dom;
+};
+//定义一个账本控件
+function account(){
+	// 默认停靠位置和偏移量
+	this.defaultAnchor = BMAP_ANCHOR_TOP_LEFT;
+	this.defaultOffset = new BMap.Size(10,10); //x,y
+};
+account.prototype = new BMap.Control();
+account.prototype.initialize = function(map){
+	// 创建一个DOM元素
+	var dom = document.createElement("div");
+	dom.id = 'account';
+	dom.style.display = 'none';
+	// 添加DOM元素到地图中
+	map.getContainer().appendChild(dom);
+	// 将DOM元素返回
+	return dom;
+};
+//定义一个车场控件
+function parking(){
+	// 默认停靠位置和偏移量
+	this.defaultAnchor = BMAP_ANCHOR_BOTTOM_LEFT;
+	this.defaultOffset = new BMap.Size(10,10); //x,y
+};
+parking.prototype = new BMap.Control();
+parking.prototype.initialize = function(map){
+	// 创建一个DOM元素
+	var dom = document.createElement("div");
+	dom.id = 'parking-box';
+	dom.style.display = 'none';
+	// 添加DOM元素到地图中
+	map.getContainer().appendChild(dom);
+	// 将DOM元素返回
+	return dom;
+};
 var home = {
-	ws:null,
 	map:null,
-	wo:null,
 	page:1,
 	maxPage:1,
 	point:{
@@ -10,81 +57,53 @@ var home = {
 		lat:''
 	},
 	list:[],
-	latest:null,
-	parking_list:[], //用来储存home_parking窗口
+	activeMarker:null,
 	activeParking:-1, //当前显示的Parking
-	homeAccount:null,
+	account:null,
+	toolBar:null,
+	parking:null,
 	getUserLocation:function(){ 
 		var _this=this;
-		this.map.getUserLocation(function(state, point){ //获取用户的当前位置信息
-			if( 0 == state ){
-				console.log(JSON.stringify(point),'用户当前位置信息')
+		var geolocation = new BMap.Geolocation();
+		geolocation.getCurrentPosition(function(r){
+			if(this.getStatus() == BMAP_STATUS_SUCCESS){
 				_this.point={
-					lng:point.longitude,
-					lat:point.latitude
+					lng:r.point.lng,
+					lat:r.point.lat
 				};
-				_this.setCenter(point);
-			}else{
-				console.log( "暂未授权!" );//用户拒绝授权地里位置
-				var point = {
+				_this.getParking({
+					longitude:r.point.lng,
+					latitude:r.point.lat
+				},'');
+			}else {
+				_this.getParking({
 					longitude:'',
-					latitude:'',
-				};
+					latitude:''
+				},'');
+				console.log('failed'+this.getStatus()); //获取失败
 			};
-			_this.getParking(point,'');
-		});
+		},{enableHighAccuracy: true})
 	},
 	createAccount:function(){//创建覆盖在地图上的账本
-		var _url ='home_account.html';
-		var top = window.immersed+10;
-		var bottom = window.innerHeight-70-top;
-		this.homeAccount = plus.webview.create(_url,_url,{
-			height:'70px',
-			bottom:bottom,
-			top:top+'px',
-			left:'3%',
-			width:'94%',
-			position:'absolute',
-			scrollIndicator:'none',
-			background:'transparent'
-		});
-		this.homeAccount.hide();
-		this.ws.append(this.homeAccount);
+		// 创建控件
+		this.account = new account();
+		// 添加到地图当中
+		this.map.addControl(this.account);
 	},
 	createToolbar:function(){//创建覆盖在地图上的工具栏
-		var _url ='home_toolbar.html';
-		var top = window.innerHeight- window.immersed-350;
-		var bottom = window.innerHeight-244-top;
-		this.ws.append(plus.webview.create(_url,_url,{
-			height:'244px',
-			bottom:bottom,
-			top:top+'px',
-			right:'3%',
-			width:'61px',
-			position:'absolute',
-			scrollIndicator:'none',
-			background:'transparent'
-		}));
+		// 创建控件
+		this.toolBar = new toolbar();
+		// 添加到地图当中
+		this.map.addControl(this.toolBar);
 	},
 	createParking:function(){
-		var _url = 'home_parking.html';
 		var list = this.list;
-		var top = window.innerHeight- window.immersed-106;
-		this.parking_list = [];
+		// 创建控件
+		this.parking = new parking();
+		// 添加到地图当中
+		this.map.addControl(this.parking);
 		for(var i=0;i<list.length;i++){
-			var sub = plus.webview.create(_url,'home_parking'+list[i].parking_lot_number,{
-				top:top,
-				left:'3%',
-				height:'106px',
-				width:'94%',
-				position:'absolute',
-				scrollIndicator:'none',
-				background:'transparent'
-			},list[i]);
-			sub.hide();
-			this.parking_list.push(sub);
 			this.createMarker(list[i].longitude,list[i].latitude,list[i].free_number,i);
-			this.ws.append(sub);
 		};
 	},
 	checkedMarker:function(lng,lat,k){ //设置地图标点选中的样式
@@ -101,46 +120,50 @@ var home = {
 		marker.uuid = k; //给当前的Marker对象自定义一个属性
 		this.map.addOverlay(marker);
 	},
-	resetMarker:function(k){ //清除所有标点，并重新绘制标点
-		this.map.clearOverlays(); //清除所有的覆盖物(此处为了清除所有的标点)
-		var list = this.list;
-		for(var i=0;i<list.length;i++){
-			if(i==k){
-				this.checkedMarker(list[i].longitude,list[i].latitude,i);
-			}else{
-				this.createMarker(list[i].longitude,list[i].latitude,list[i].free_number,i);
-			};
-		};
-	},
 	createMarker:function(lng,lat,status,k){//创建地图标点Marker对象
-		var Icon = '/img/unchecked';
+		var IconSrc = '/img/unchecked';
 		var Size = '';
 		var _this = this;
-		if(plus.os.name=='Android'){
-			Size = '';
-		}else{
-			Size = '48';
-		};
-		var _this = this;
-		var marker=new plus.maps.Marker(new plus.maps.Point(lng,lat));
-		marker.setIcon(Icon+Size+'.png');
+		var pt = new BMap.Point(lng,lat);
+		var Icon = new BMap.Icon(location.origin+IconSrc+'.png', new BMap.Size(48,52));
+		Icon.setImageSize(new BMap.Size(48,52));
+		var marker= new BMap.Marker(pt,{icon:Icon});
 		marker.uuid = k; //给当前的Marker对象自定义一个属性
-		marker.onclick = function(marker){
-			if(_this.activeParking==marker.uuid){
+		marker.onclick = function(){
+			if(_this.activeParking==this.uuid){
 				return false;
 			};
-			_this.resetMarker(marker.uuid);
-			var item = _this.list[marker.uuid];
-			if(mui.os.ios){
-				plus.webview.show('home_parking'+item.parking_lot_number);
-			}else{
-				plus.webview.show('home_parking'+item.parking_lot_number,"fade-in",300);
+			//改变当前marker的图标
+			var _Icon = new BMap.Icon(location.origin+'/img/checked.png', new BMap.Size(55,68));
+			_Icon.setImageSize(new BMap.Size(55,68));
+			this.setIcon(_Icon);
+			var item = _this.list[this.uuid];
+			if(_this.activeMarker!=null){//改变上一个marker的图标
+				var _Icon2 = new BMap.Icon(location.origin+'/img/unchecked.png', new BMap.Size(48,52));
+				_Icon2.setImageSize(new BMap.Size(48,52));
+				_this.activeMarker.setIcon(_Icon2);
 			};
-			if(_this.activeParking!=-1){
-				var old = _this.list[_this.activeParking];
-				plus.webview.hide('home_parking'+old.parking_lot_number);
-			};
-			_this.activeParking = marker.uuid;
+			_this.activeMarker = this;
+			_this.activeParking = this.uuid;
+			var distance = (item.distance/1000).toFixed(3),h=mui('#parking-box')[0];
+			var _html = '<div class="parking" id="'+item.parking_lot_number+'">'+
+				'<div class="parking-l">'+
+					'<div class="top">'+
+						'<span class="name">'+item.parking_lot_name+'</span>'+
+					'</div>'+
+					'<p class="address">'+item.parking_lot_address+'</p>'+
+					'<div class="parking-b">'+
+						'<span class="price"><span>'+(item.price)/100+'元</span>/小时</span>'+
+						'<span class="num">车位:'+item.free_number+'/'+item.number+'</span>'+
+					'</div>'+
+				'</div>'+
+				'<div class="parking-r">'+
+					'<div class="parking-img"><span class="goRoute" data-longitude="'+item.longitude+'" data-latitude="'+item.latitude+'"></span></div>'+
+					'<p>'+distance+'km</p>'+
+				'</div>'+
+			'</div>';
+			h.innerHTML = _html;
+			h.style.display ='block';
 		};
 		this.map.addOverlay(marker);
 	},
@@ -264,20 +287,6 @@ var home = {
 			mui.alert('未获取到您的位置，无法进行导航');
 		}
 	},
-	openNews:function(){
-		mui.openWindow({
-			url:'message.html',
-			id:'message.html',
-			styles:{
-			    statusbar:{
-				    background:"#fff" 
-			    },
-			    top:0,
-			    left:0,
-			    position:"absolute"
-		 	}
-		});
-	},
 	showUserLocation:function(){ //打开用户位置
 		if(this.point.lng!=''){
 			var ptObj = new plus.maps.Point(this.point.lng,this.point.lat);
@@ -293,7 +302,7 @@ var home = {
 			if( 0 == state ){
 				console.log(JSON.stringify(point))
 			}else{
-				console.log( "Failed!" );//未获取到
+				console.log( "Failed!" );//未获取到用户的地里位置
 			};
 		})
 	},
@@ -301,12 +310,6 @@ var home = {
 		this.map.setCenter(point);
 	},
 	getUpData:function(){ //获取最新数据
-		var items = this.parking_list; //创建的home_parking窗口
-		this.list = [];
-		for(var i=0;i<list.length;i++){
-			items[i].close(); //关闭窗口
-		};
-		this.map.clearOverlays(); //清除所有的覆盖物(此处为了清除所有的标记)
 		this.getParking(); //获取最新的列表数据
 	},
 	openMenu:function(){
@@ -331,21 +334,6 @@ var home = {
 		  }
 		});
 	},
-	showAccount:function(){
-		this.homeAccount.show();
-	},
-	bindEvent:function(){
-		var _this = this;
-//		this.map.onclick = function(point){  //获取当前用户点击的地里位置
-////			console.log(JSON.stringify(point),'点击地图')
-//		};
-		window.addEventListener('updata',function(){
-			_this.getUpData();
-		});
-		window.addEventListener('showAccount',function(){
-			_this.showAccount();
-		});
-	},
 	blockLatest:function(){
 		var _this= this;
 		mui.ajax(AJAX_PATH+'/block/latest',{
@@ -353,12 +341,19 @@ var home = {
 			type:'get',
 			success:function(res,textStatus,xhr){
 				if(res.code==200){
-					console.log(JSON.stringify(res));
-					_this.latest = res.data;
-					console.log(_this.homeAccount.id)
-					mui.fire(_this.homeAccount,'updata',{
-						latest:_this.latest
-					});
+					var latest = res.data,h = mui('#account')[0];
+					var _html = '<div class="current account-info">'+
+						'<span class="account-name">当前账本HASH</span>'+
+						'<span class="account-address">'+latest.ledgerHash+'</span>'+
+						'<span class="account-time">'+latest.closeTime.substring(0,16)+'</span>'+
+					'</div>'+
+					'<div class="parent account-info">'+
+						'<span class="account-name">父账本HASH</span>'+
+						'<span class="account-address">'+latest.parentLedgerHash+'</span>'+
+						'<span class="account-time">'+latest.parentCloseTime.substring(0,16)+'</span>'+
+					'</div>';
+					h.innerHTML = _html;
+					h.style.display ='block';
 					setTimeout(function(){
 						_this.blockLatest();
 					},10000);
@@ -388,12 +383,37 @@ var home = {
 			}
 		});
 	},
+	CreateMap:function(){
+		this.map = new BMap.Map("map");
+		var point = new BMap.Point(116.404, 39.915);  // 创建点坐标  
+        this.map.centerAndZoom(point, 15);
+        this.map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
+	},
+	bindEvent:function(){
+		var _this = this;
+		mui('.g-content').on('tap','#news',function(){
+			app.addRoute('message.html');
+		});
+		mui('.g-content').on('tap','#search',function(){
+			app.addRoute('search.html');
+		});
+		mui('.g-content').on('tap','#list',function(){
+			app.addRoute('parking.html');
+		});
+		mui('.g-content').on('tap','#location',function(){
+			_this.showUserLocation();
+		});
+		mui('.g-content').on('tap','.parking',function(){
+			var id = this.id;
+			app.addRoute('order.html?parking_lot_num='+id);
+		});
+		mui('.g-content').on('tap','.goRoute',function(e){ //导航
+//			app.addRoute('order.html');
+			e.stopPropagation();
+		});
+	},
 	init:function(){
-		// 获取窗口对象
-		this.ws=plus.webview.currentWebview();
-		this.wo=this.ws.opener(); //opener获取当前Webview窗口的创建者
-		//创建map对象http://www.html5plus.org/doc/zh_cn/maps.html#plus.maps.Map.Map(id,options)
-		this.map = new plus.maps.Map('map');
+		this.CreateMap();
 		this.createAccount();
 		this.createToolbar();
 		this.getUserLocation();
@@ -401,8 +421,4 @@ var home = {
 		this.bindEvent();
 	}
 }
-mui.plusReady(function(){
-	if(!home.ws){
-		home.init();
-	};
-})
+home.init();

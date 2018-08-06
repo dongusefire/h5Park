@@ -1,8 +1,14 @@
+.anchorBL {
+	display: none;
+}
 #home-box {
 	background: #fff;
 }
 #toolbar {
 	width:61px;
+	position: absolute;
+	right:5px !important;
+	bottom:136px !important;
 }
 #toolbar span {
 	width:100%;
@@ -15,16 +21,13 @@
 }
 #map {
 	width: 100%;
-    position: fixed;
-	top:0;
-	right:0;
-	bottom:0;
-	left:0;
-	z-index: 2;
+	height: 100%;
 }
 #parking-box {
 	position: relative;
-	margin: 5px;
+	left:10px !important;
+	right:10px !important;
+	bottom:10px !important;
 	max-height: 106px;
 	background: #FFFFFF;
 	-webkit-box-shadow: 0 0px 5px 0 #909090;
@@ -54,7 +57,9 @@
 	color:#959595;
 }
 #account {
-	margin:5px;
+	left:10px !important;
+	top:10px !important;
+	right:10px !important;
 	background: #FFFFFF;
 	-webkit-box-shadow: 0 0px 5px 0 #909090;
 	box-shadow: 0 0px 5px 0 #909090;
