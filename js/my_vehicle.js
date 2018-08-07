@@ -111,9 +111,7 @@ var vm = new Vue({
 		}
 	}
 })
-mui.plusReady(function(){
-	vm.getData();
-})
+vm.getData();
 //设置更新事件
 window.addEventListener('readData',function(){
 	vm.readData();

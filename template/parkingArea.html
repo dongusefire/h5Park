@@ -28,31 +28,33 @@
     <script src="../js/app.js" type="text/javascript" charset="utf-8"></script>
     <script src="../js/jquery-1.11.2.min.js"></script>
     <script>
-    	function init(){
-    		mui.init({
-	    		beforeback:function(){
-	    			var list = plus.webview.getWebviewById('order.html');
-	    			mui.fire(list,'alr');
-	    			return true;
-	    		}
-	    	});
-    	}
+//  	function init(){
+//  		mui.init({
+//	    		beforeback:function(){
+//	    			var list = plus.webview.getWebviewById('order.html');
+//	    			mui.fire(list,'alr');
+//	    			return true;
+//	    		}
+//	    	});
+//  	}
     	mui.init();
     	//获取创建当前窗口的webview对象
-		var ws,token,park_lot_num,park_lot_name,noSpace;
-		mui.plusReady(function(){
+		var ws,token,park_lot_num,park_lot_name,noSpace,params;
+		mui.ready(function(){
     		//获取创建当前窗口的webview对象
-			ws = plus.webview.currentWebview();
+//			ws = plus.webview.currentWebview();
 	    	token = localStorage.getItem('token');
-			park_lot_num = ws.parking_lot_num;
-			park_lot_name = ws.park_name? ws.park_name:localStorage.getItem('parkingName');
-			noSpace = ws.noSpace;
-			if(noSpace=='haveNo'){
-				init();
-			}
+	    	params = app.getRequest();
+			park_lot_num = params.parking_lot_num;
+			park_lot_name = params.park_name? params.park_name:localStorage.getItem('parkingName');
+			noSpace = params.noSpace;
+//			if(noSpace=='haveNo'){
+//				init();
+//			}
 	    	$('.mui-title').html(park_lot_name);
 	    	getData();
     	});
+    	
 		
     	function getData(){
     		mui.ajax(AJAX_PATH+'/parking/self/positionInfo?token='+token,{
@@ -122,22 +124,7 @@
 		    			for(var item in res.data.park_bf_info){
 		    				p_b_area.push(item);
 		    			};
-		    			mui.openWindow({
-		    				url:"parking-spaces.html",
-		    				id:"parking-spaces.html",
-		    				styles:{
-								popGesture: "close",
-								statusbar:{
-									background:"#fff" 
-								}
-							},
-		    				extras:{
-		    					p_b_num:build,
-		    					p_b_floor:floor,
-		    					park_lot_num:park_lot_num,
-		    					p_b_area:p_b_area
-		    				}
-		    			})
+						app.addRoute("parking-spaces.html?p_b_num="+build+"&p_b_floor="+floor+"&park_lot_num="+park_lot_num+"&p_b_area="+p_b_area);
 		    		}
 		    });
     	};

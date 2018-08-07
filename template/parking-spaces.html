@@ -31,10 +31,11 @@
 	<script type="text/javascript">
 		mui.init();
 		var html_ = '',floor_ = '',text1 = '', text2 = '';
-		var ws,token;
-    	mui.plusReady(function(){
-    		ws = plus.webview.currentWebview();
+		var token,params;
+    	mui.ready(function(){
+//  		ws = plus.webview.currentWebview();
     		token = localStorage.getItem('token');
+    		params = app.getRequest();
     		vm.getData(1);
     	});
 		var vm = new Vue({
@@ -46,10 +47,10 @@
 				getData:function(num){
 					var _this = this;
 					var jsonData = {
-							"park_lot_num":ws.park_lot_num,
-							"p_b_num":ws.p_b_num,
-							"p_b_f":ws.p_b_floor,
-							"p_b_area":ws.p_b_area[0],
+							"park_lot_num":params.park_lot_num,
+							"p_b_num":params.p_b_num,
+							"p_b_f":params.p_b_floor,
+							"p_b_area":params.p_b_area[0],
 							"page":num,
 							"size":20
 					};
@@ -106,33 +107,20 @@
 		//点击去预定
 		$('.space-list').on('click','.toOrder',function(){
 			var p_l_num = this.getAttribute('data-num'),space_id = this.getAttribute('data-id'),p_s_num = this.getAttribute('data-psnum');
-			var order = plus.webview.getWebviewById('order.html');
-			order.close();
+//			var order = plus.webview.getWebviewById('order.html');
+//			order.close();
 			setTimeout(function(){
-				mui.openWindow('order.html','order.html',{
-					styles:{
-						popGesture: "close",
-						statusbar:{
-							background:"#fff" 
-						}
-					},
-					extras:{
-						parking_lot_num:p_l_num,//停车场编号
-						park_space_id:space_id,//车位id
-						p_b_num:ws.p_b_num,//楼栋编号
-						p_b_f:ws.p_b_floor,//楼层编号
-						p_b_area:ws.p_b_area[0],//区域编号
-						p_s_num:p_s_num,
-						isSpaces:true
-					}
-				});
+				app.addRoute("order.html?parking_lot_num="+p_l_num+"&park_space_id"+space_id+"&p_b_num="+params.p_b_num+"&p_b_f="+params.p_b_floor+"&p_b_area="+params.p_b_area[0]+"&p_s_num="+p_s_num+"&isSpaces="+'true');
 			},500);
-			setTimeout(function(){
-				var Area = plus.webview.getWebviewById('parkingArea.html');
-				var Spaces = plus.webview.getWebviewById('parking-spaces.html');
-				Area.close();
-				Spaces.close();
-			},1000);
+//			setTimeout(function(){
+//				var Area = plus.webview.getWebviewById('parkingArea.html');
+//				var Spaces = plus.webview.getWebviewById('parking-spaces.html');
+//				Area.close();
+//				Spaces.close();
+//			},1000);
+			
+			
+			
 //			mui.fire(order,'readData',{
 //				parking_lot_num:p_l_num,//停车场编号
 //				park_space_id:space_id,//车位id

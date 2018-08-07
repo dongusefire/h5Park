@@ -137,12 +137,8 @@ var vm = new Vue({
 				success:function(res,textStatus,xhr){
 					if(res.code==200){
 						mui.toast('添加成功');
-						//获取我的页面的窗口对象
-			    		var wo = plus.webview.currentWebview().opener();
-						//触发我的页面（readData）,从而进行数据刷新
-						mui.fire(wo,'readData');
 						setTimeout(function(){
-							mui.back();
+							window.location.href=document.referrer;
 						},1000);
 					}else if(res.code==509){
 						_this.addVehicle();

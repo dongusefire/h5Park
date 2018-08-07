@@ -76,43 +76,61 @@
 			var l_park_lot_num,l_park_space_id,l_p_b_num,l_p_b_floor,l_p_b_area,l_p_s_num;
 			var info_ = '';
 			var time1,time2;
-			window.addEventListener('readData',function(event){
-				var data = event.detail;
-				park_space_id = data.park_space_id;
-				Park_lot_num = ws.parking_lot_num;
-				alert('readData')
-				l_park_lot_num = data.parking_lot_num, l_park_space_id = data.park_space_id, l_p_b_num = data.p_b_num,l_p_b_floor = data.p_b_f,l_p_b_area = data.p_b_area,l_p_s_num=data.p_s_num;
+			var params;
+//			window.addEventListener('readData',function(event){
+//				var data = event.detail;
+//				park_space_id = data.park_space_id;
+//				Park_lot_num = ws.parking_lot_num;
+//				alert('readData')
+//				l_park_lot_num = data.parking_lot_num, l_park_space_id = data.park_space_id, l_p_b_num = data.p_b_num,l_p_b_floor = data.p_b_f,l_p_b_area = data.p_b_area,l_p_s_num=data.p_s_num;
+//				token = localStorage.getItem('token');
+//				plus.nativeUI.showWaiting('信息加载中，请稍候...');
+//				mask.show();//显示遮罩
+//				setTimeout(function(){
+//					load(mui,document,jQuery);
+//				},800);
+//			});
+
+//			window.addEventListener('alr',function(){
+//				mui.back();
+//			})
+//			mui.plusReady(function(){
+//				//获取创建当前窗口的webview对象
+//				ws = plus.webview.currentWebview();
+//				token = localStorage.getItem('token');
+//				params = app.getRequest();
+////				Park_lot_num = ws.parking_lot_num;
+//				park_space_id = ws.park_space_id;
+//				Park_lot_num = params.parking_lot_num;
+//				//获取从固定车位列表页带来的六条信息
+//				l_park_lot_num = ws.parking_lot_num, l_park_space_id = ws.park_space_id, l_p_b_num = ws.p_b_num,l_p_b_floor = ws.p_b_f,l_p_b_area = ws.p_b_area,l_p_s_num=ws.p_s_num;
+//				if(!token || token==''){
+//					login();
+//				}else{
+//					plus.nativeUI.showWaiting('信息加载中，请稍候...',{
+//						modal:true,
+//						padlock:true
+//					});
+//					mask.show();//显示遮罩
+//					setTimeout(function(){
+//						load(mui,document,jQuery);
+//					},800);
+//				};
+//			});
+			window.onload = function(){
 				token = localStorage.getItem('token');
-				plus.nativeUI.showWaiting('信息加载中，请稍候...');
-				mask.show();//显示遮罩
-				setTimeout(function(){
-					load(mui,document,jQuery);
-				},800);
-			});
-			window.addEventListener('alr',function(){
-				mui.back();
-			})
-			mui.plusReady(function(){
-				//获取创建当前窗口的webview对象
-				ws = plus.webview.currentWebview();
-				token = localStorage.getItem('token');
-				Park_lot_num = ws.parking_lot_num;
-				park_space_id = ws.park_space_id;
-				//获取从固定车位列表页带来的六条信息
-				l_park_lot_num = ws.parking_lot_num, l_park_space_id = ws.park_space_id, l_p_b_num = ws.p_b_num,l_p_b_floor = ws.p_b_f,l_p_b_area = ws.p_b_area,l_p_s_num=ws.p_s_num;
+				params = app.getRequest();
+				Park_lot_num = params.parking_lot_num;
+				l_park_lot_num = params.parking_lot_num, l_park_space_id = params.park_space_id, l_p_b_num = params.p_b_num,l_p_b_floor = params.p_b_f,l_p_b_area = params.p_b_area,l_p_s_num=params.p_s_num;
 				if(!token || token==''){
 					login();
 				}else{
-					plus.nativeUI.showWaiting('信息加载中，请稍候...',{
-						modal:true,
-						padlock:true
-					});
 					mask.show();//显示遮罩
 					setTimeout(function(){
-						load(mui,document,jQuery);
+						load(mui,document,Zepto);
 					},800);
 				};
-			});
+			}
 			//获取时间差
 			function GetDateDiff(startTime, endTime, diffType) {
 				  startTime = startTime.replace(/\-/g, "/");
@@ -184,7 +202,7 @@
 						type:'get',
 						success:function(res,status,xhr){
 							mask.close();
-							plus.nativeUI.closeWaiting();
+//							plus.nativeUI.closeWaiting();
 							if( res.code== '200'){
 								console.log(JSON.stringify(res.data));
 								if(res.data.userCarInfo == ''){
@@ -294,12 +312,12 @@
 							dataType:'json',
 							data:postData,
 							beforeSend:function(){
-								plus.nativeUI.showWaiting();
+//								plus.nativeUI.showWaiting();
 								mask.show();//显示遮罩
 							},
 							success:function(res){
 								ajaxSubmit_off = false;
-								plus.nativeUI.closeWaiting();
+//								plus.nativeUI.closeWaiting();
 								mask.close();//关闭遮罩层
 								if(res.code == 200){
 									//成功之后做的处理
@@ -317,18 +335,18 @@
 											park_id:res.data.park_id
 										}
 									});
-									var home = plus.webview.getWebviewById('template/home.html');
-									mui.fire(home,'updata');
+//									var home = plus.webview.getWebviewById('template/home.html');
+//									mui.fire(home,'updata');
 								}else if(res.code==509){
 									AJAXPOST(postData);
 								}else if(res.code!=502 && res.code!=503){
-									plus.nativeUI.closeWaiting();
+//									plus.nativeUI.closeWaiting();
 									mask.close();//关闭遮罩层
 									mui.alert(res.msg,app.name+'提示','确定',null);
 								}
 							},
 							error:function(){
-									plus.nativeUI.closeWaiting();
+//									plus.nativeUI.closeWaiting();
 									mask.close();//关闭遮罩层
 									mui.alert('服务器连接超时，请稍后再试',app.name+'提示','确定',null);
 							}
@@ -340,7 +358,7 @@
 					//提交预定AJAX函数
 					if(!ajaxSubmit_off){
 						ajaxSubmit_off = true;
-						plus.nativeUI.showWaiting();
+//						plus.nativeUI.showWaiting();
 						mask.show();//显示遮罩
 						mui.ajax(AJAX_PATH+'/user/reserve?token='+token,{
 							type:'post',
@@ -348,7 +366,7 @@
 							data:postData,
 							success:function(res){
 								ajaxSubmit_off = false;
-								plus.nativeUI.closeWaiting();
+//								plus.nativeUI.closeWaiting();
 								mask.close();//关闭遮罩层
 								console.log('信用值低于120',JSON.stringify(res));
 								if(res.code == 200){
@@ -372,13 +390,13 @@
 								}else if(res.code==509){
 									ajax_order(postData);
 								}else if(res.code!=502 && res.code!=503){
-									plus.nativeUI.closeWaiting();
+//									plus.nativeUI.closeWaiting();
 									mask.close();//关闭遮罩层
 									mui.alert(res.msg,app.name+'提示','确定',null);
 								}
 							},
 							error:function(){
-									plus.nativeUI.closeWaiting();
+//									plus.nativeUI.closeWaiting();
 									mask.close();//关闭遮罩层
 									mui.alert('服务器连接超时，请稍后再试',app.name+'提示','确定',null);
 							}
@@ -515,24 +533,26 @@
 				});
 
 				$$('.optional').click(function(){
-					chooseSpace();
+					chooseSpace('have');
 				});
 				function chooseSpace(recive){
-					var options = {
-						styles:{
-							popGesture: "close",
-							statusbar:{
-								background:"#fff" 
-							}
-						},
-						extras:{
-							parking_lot_num:Park_lot_num,
-							park_name:park_lot_name,
-							noSpace:recive
-						}
-					};
+//					var options = {
+//						styles:{
+//							popGesture: "close",
+//							statusbar:{
+//								background:"#fff" 
+//							}
+//						},
+//						extras:{
+//							parking_lot_num:Park_lot_num,
+//							park_name:park_lot_name,
+//							noSpace:recive
+//						}
+//					};
 					setTimeout(function(){
-						mui.openWindow("parkingArea.html","parkingArea.html",options);
+//						mui.openWindow("parkingArea.html","parkingArea.html",options);
+						app.addRoute("parkingArea.html?parking_lot_num="+Park_lot_num+"&park_name="+park_lot_name+"&noSpace="+recive);
+//						window.location.href = "parkingArea.html?parking_lot_num="+Park_lot_num+"&park_name="+park_lot_name+"&noSpace="+recicve;
 					},500);
 				}
 				

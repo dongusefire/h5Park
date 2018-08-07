@@ -18,16 +18,16 @@
 	        <span class="mui-icon home"></span>
 	        <span class="mui-tab-label">预定</span>
 	    </a>
-	    <a class="mui-tab-item" href="/template/issue.html" data-type="issue">
+	    <a class="mui-tab-item" href="issue.html" data-type="issue">
 	        <span class="mui-icon push"></span>
 	        <span class="mui-tab-label">发布</span>
 	    </a>
-	    <a class="mui-tab-item mui-active" href="/template/my.html">
+	    <a class="mui-tab-item mui-active" href="my.html">
 	        <span class="mui-icon my"></span>
 	        <span class="mui-tab-label">我的</span>
 	    </a>
 	</nav>
-	<div class="mui-content g-content" v-cloak>
+	<div class="mui-content g-content g-box" v-cloak>
 		<div class="park-header" id="park-header">
 		    <div class="mipark-top">
 	      	   <div class="Headportrait">
@@ -45,37 +45,37 @@
 		    </div>
 		</div>
 		<div class="park-nav" id="park-nav">
-			<a href="wallet.html" class="item-box" :data-wallet="wallet">
+			<!--<a href="wallet.html" class="item-box" :data-wallet="wallet">
 				<span class="item-icon"><img src="../img/wdqb.png"></span>
 				<span class="item-title">我的钱包</span>
-			</a>
+			</a>-->
 			<a href="orderList.html" class="item-box">
 				<span class="item-icon"><img src="../img/dd.png"></span>
 				<span class="item-title">我的订单</span>
 			</a>
-			<a href="my_parking.html" class="item-box">
+			<!--<a href="my_parking.html" class="item-box">
 				<span class="item-icon"><img src="../img/cw.png"></span>
 				<span class="item-title">我的车位</span>
-			</a>
+			</a>-->
 			<a id="line-distance" href="my_vehicle.html" class="item-box">
 				<span class="item-icon"><img src="../img/cl.png"></span>
 				<span class="item-title">车辆管理</span>
 			</a>
-			<a href="message.html" class="item-box">
+			<!--<a href="message.html" class="item-box">
 				<span class="item-icon">
 					<img src="../img/xx.png">
 					<span class="tip-num" v-show="t_num!=0&&t_num">{{t_num}}</span>
 				</span>
 				<span class="item-title">我的消息</span>
-			</a>
+			</a>-->
 			<a id="line-distance" href="userGuide.html" class="item-box">
 				<span class="item-icon"><img src="../img/zn.png"></span>
 				<span class="item-title">用户指南</span>
 			</a>
-			<a id="distance" href="setting.html" class="item-box">
+			<!--<a id="distance" href="setting.html" class="item-box">
 				<span class="item-icon"><img src="../img/xz.png"></span>
 				<span class="item-title">设置</span>
-			</a>
+			</a>-->
 		</div>
 	</div>
 	<script src="../js/immersed.js" type="text/javascript" charset="utf-8"></script>
@@ -83,14 +83,14 @@
 	<script src="../js/app.js"></script>
 	<script type="text/javascript">
 		//当前激活选项
-		var activeTab = "template/my.html";
+		var activeTab = "my.html";
 		//选项卡点击事件
 		mui('.mui-bar-tab').on('tap', 'a', function(e) {
 			var targetTab = this.getAttribute('href');
 			if (targetTab == activeTab) {
 				return;
 			};
-			location.href = targetTab;
+			app.addRoute(targetTab)
 		});
 		var vm = new Vue({
 			el:'.mui-content',

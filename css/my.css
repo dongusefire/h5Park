@@ -189,3 +189,10 @@
 	border-radius: 50%;
 }
 
+.mui-bar-tab~.mui-content {
+     margin-bottom: 50px; 
+}
+
+.g-box {
+	position: initial;
+}
