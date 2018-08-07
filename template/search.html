@@ -26,7 +26,7 @@
 		<div class="tab-box" v-show="tabIndex==0">
 			<div class="search-title">历史搜索</div>	
 			<div class="records" v-show="searchList.length!=0">
-				<span class="his" v-for="search in searchList" @click="setSearch(search)">{{search}}</span>
+				<span class="his" v-for="search in searchList" @click="tapSearch(search)">{{search}}</span>
 			</div>
 			<div class="search-null" v-show="searchList.length==0">暂无记录</div>
 		</div>

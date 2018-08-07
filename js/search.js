@@ -1,17 +1,23 @@
 mui.init();
-mui.plusReady(function(){
-	var ws = plus.webview.currentWebview();
-	vm.point = ws.point;
-	vm.getSearch();
-})
 var vm = new Vue({
 	el:'.mui-content',
 	data:{
-		searchList:['2'],
+		searchList:[],
 		items:[],
 		point:null,
 		keywords:'',
 		tabIndex:0
+	},
+	created:function(){
+		var startpoint = localStorage.getItem('startpoint');
+		if(startpoint && startpoint!=''){
+			var point = startpoint.split(',');
+			this.point = {
+				lng:point[0],
+				lat:point[1]
+			};
+		};
+		this.getSearch();
 	},
 	methods:{
 		getSearch:function(){
@@ -41,6 +47,12 @@ var vm = new Vue({
 					};
 				};
 			};
+		},
+		tapSearch:function(str){
+			var inp = document.getElementById('search-input');
+			inp.value = str;
+			this.keywords = str;
+			this.getParking();
 		},
 		getParking:function(){
 			var _this= this;
@@ -74,17 +86,15 @@ mui('.header-bar').on('change','#search-input',function(){
 	vm.setSearch(str);
 })
 mui('.header-bar').on('input','#search-input',function(){
-	vm.keywords = this.value.replace(/^\s+|\s+$/g, '');
+	var str = this.value.replace(/^\s+|\s+$/g, '');
 	vm.getParking();
 })
 mui('.search-list').on('tap','.parking',function(){
 	var id = this.getAttribute('id');
-	localStorage.setItem('parkingName',vm.items[id].parking_lot_name);
-	plus.webview.currentWebview().opener().evalJS('home.bespeak('+vm.items[id].parking_lot_number+')');
+	app.addRoute('order.html?parking_lot_num='+vm.items[id].parking_lot_number)
 });
 mui('.search-list').on('tap','.goRoute',function(e){
 	var id = this.getAttribute('id');
-	localStorage.setItem('parking_lot_address',vm.items[id].parking_lot_address);
-	plus.webview.currentWebview().opener().evalJS('home.createRoute('+vm.items[id].longitude+','+vm.items[id].latitude+')');
+	app.goRoute(vm.items[id].longitude,vm.items[id].latitude,vm.items[id].parking_lot_address);
     e.stopPropagation();
 });

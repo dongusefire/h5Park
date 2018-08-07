@@ -65,12 +65,9 @@
 		</div>
 	</div>
     <script src="../js/mui.min.js"></script>
+    <script src="../js/app.js" type="text/javascript" charset="utf-8"></script>
     <script type="text/javascript">
     	mui.init();
-    	mui.plusReady(function(){
-    		var ws = plus.webview.currentWebview();
-    		vm.readData(ws.data,ws.point);
-    	});
     	var vm = new Vue({
 			el:'.mui-content',
 			data:{
@@ -86,14 +83,18 @@
 				sort:'智能排序',
 				sortValue:'distance',
 			},
-			methods:{
-				readData:function(res,point){ //初始化第一次的数据
-					for(var i=0;i<res.length;i++){
-						res[i].distance = (res[i].distance/1000).toFixed(3)
+			created:function(){
+				var startpoint = localStorage.getItem('startpoint');
+				if(startpoint && startpoint!=''){
+					var point = startpoint.split(',');
+					this.point = {
+						longitude:point[0],
+						latitude:point[1]
 					};
-					this.items = res;
-					this.point = point;
-				},
+				};
+				this.getParking();
+			},
+			methods:{
 				getParking:function(){
 					var _this= this;
 					mui.ajax(AJAX_PATH+'/parkinglot/search',{
@@ -120,20 +121,14 @@
 				}
 			}
 		});
-		window.addEventListener('readData',function(event){
-		  vm.readData(event.detail.data,event.detail.point);
-		});
 		mui('#parking-list').on('tap','.parking',function(e){
 			var id = this.getAttribute('id');
-			localStorage.setItem('parkingName',vm.items[id].parking_lot_name);
-			plus.webview.currentWebview().opener().evalJS('home.bespeak('+vm.items[id].parking_lot_number+')');
-			e.stopPropagation();
+			app.addRoute('order.html?parking_lot_num='+vm.items[id].parking_lot_number)
 		});
 		mui('#parking-list').on('tap','.goRoute',function(e){
 			var id = this.getAttribute('id');
-			localStorage.setItem('parking_lot_address',vm.items[id].parking_lot_address);
-			plus.webview.currentWebview().opener().evalJS('home.createRoute('+vm.items[id].longitude+','+vm.items[id].latitude+')');
-		    e.stopPropagation();
+			app.goRoute(vm.items[id].longitude,vm.items[id].latitude,vm.items[id].parking_lot_address);
+			e.stopPropagation();
 		});
 		document.querySelector('#sort.mui-table-view-radio').addEventListener('selected',function(e){
 			vm.sortValue =e.detail.el.dataset.sort; 

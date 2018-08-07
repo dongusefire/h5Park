@@ -209,9 +209,6 @@ var home = {
 		mui('.g-content').on('tap','#list',function(){
 			app.addRoute('parking.html');
 		});
-		mui('.g-content').on('tap','#location',function(){
-			_this.showUserLocation();
-		});
 		mui('.g-content').on('tap','.parking',function(){
 			var id = this.id;
 			app.addRoute('order.html?parking_lot_num='+id);
