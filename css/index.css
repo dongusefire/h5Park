@@ -1,14 +1,17 @@
-.anchorBL {
-	display: none;
+.amap-logo,.amap-copyright {
+	display: none !important;
 }
 #home-box {
 	background: #fff;
 }
+#toolbar,#account,#parking-box {
+	z-index: 5;
+}
 #toolbar {
 	width:61px;
 	position: absolute;
-	right:5px !important;
-	bottom:136px !important;
+	right:5px;
+	bottom:136px;
 }
 #toolbar span {
 	width:100%;
@@ -24,10 +27,10 @@
 	height: 100%;
 }
 #parking-box {
-	position: relative;
-	left:10px !important;
-	right:10px !important;
-	bottom:10px !important;
+	position: absolute;
+	left:10px;
+	right:10px;
+	bottom:10px;
 	max-height: 106px;
 	background: #FFFFFF;
 	-webkit-box-shadow: 0 0px 5px 0 #909090;
@@ -57,9 +60,10 @@
 	color:#959595;
 }
 #account {
-	left:10px !important;
-	top:10px !important;
-	right:10px !important;
+	position: absolute;
+	left:10px;
+	top:10px;
+	right:10px;
 	background: #FFFFFF;
 	-webkit-box-shadow: 0 0px 5px 0 #909090;
 	box-shadow: 0 0px 5px 0 #909090;

@@ -15,6 +15,14 @@ var app = {
 			location.href = str;
 		};
 	},
+	goRoute:function(lng,lat,address){
+		var startpoint = localStorage.getItem('startpoint');
+		if(startpoint && startpoint!=''){
+			this.addRoute('nav.html?startpoint='+startpoint+'&endpoint='+lng+','+lat+','+address);
+		}else{
+			this.addRoute('nav.html?endpoint='+lng+','+lat+','+address);
+		};
+	},
 	getRequest:function() {    
 	   var url = location.search; //获取url中"?"符后的字串    
 	   var theRequest = new Object();    
