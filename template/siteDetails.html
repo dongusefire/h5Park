@@ -93,11 +93,11 @@
 			});
 			
 			//调用导航
-//			mui('.box').on('tap','.guide',function(e){
-//				localStorage.setItem('parking_lot_address',vm.p_address);
-//				plus.webview.getWebviewById('template/home.html').evalJS('home.createRoute('+ws.lng+','+ws.lat+')');
-//			    e.stopPropagation();
-//			})
+			mui('.box').on('tap','.guide',function(e){
+			    var lng = params.lng,lat = params.lat;
+				app.goRoute(lng,lat,vm.p_address);
+				e.stopPropagation();
+			})
 		</script>
 	</body>
 

@@ -155,33 +155,17 @@
 					var park_lot_num = $(this).attr('data-plnum');
 					var lat = $(this).parent().attr('data-lat');
 					var lon = $(this).parent().attr('data-lon');
-//					mui.openWindow({
-//						url:'siteDetails.html',
-//						id:'siteDetails.html',
-//						styles:{
-//							popGesture: "close",
-//							statusbar:{
-//								background:"#fff" 
-//							}
-//						},
-//						extras:{
-//							park_lot_num:park_lot_num,
-//							lat:lat,
-//							lng:lon
-//						}
-//					})
 					window.location.href = "siteDetails.html?park_lot_num="+park_lot_num+"&lat="+lat+"&lng="+lon;
 				});
 				//点击导航
-//				mui('.state-btn').on('tap','.goRoute',function(e){
-//					var boss = $(this).parents('.mui-content');
-//					var dataCarrier1 = boss.find('.mui-details').children('.name'),dataCarrier2 = boss.find('.mui-details').children('.address');
-//					var data_lat = dataCarrier1.attr('data-lat'),data_lng = dataCarrier1.attr('data-lon');
-//					var address = dataCarrier2.attr('data-address');
-//					localStorage.setItem('parking_lot_address',address);
-//					plus.webview.getWebviewById('template/home.html').evalJS('home.createRoute('+data_lng+','+data_lat+')');
-//				    e.stopPropagation();
-//				});
+				mui('.state-btn').on('tap','.goRoute',function(e){
+					var boss = $(this).parents('.mui-content');
+					var dataCarrier1 = boss.find('.mui-details').children('.name'),dataCarrier2 = boss.find('.mui-details').children('.address');
+					var data_lat = dataCarrier1.attr('data-lat'),data_lng = dataCarrier1.attr('data-lon');
+					var address = dataCarrier2.attr('data-address');
+					app.goRoute(data_lng,data_lat,address);
+					e.stopPropagation();
+				});
 				//跳去支付
 				mui('.state-btn').on('tap','.to_pay',function(){
 					var options = {

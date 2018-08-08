@@ -9,14 +9,15 @@ function readData(){
 		dataType:'json',
 		data:{},
 		beforeSend:function(){
-			index = layer.msg('正在加载，请稍候...',{
-				time:10000
-			});
-			mask.show();//显示遮罩
+		index = layer.open({
+			type: 2
+			,content: '加载中'
+			,shadeClose:false
+			,shade:'top:47px;background-color: rgba(0,0,0,.2)'
+		});
 		},
 		success:function(res){
-			mask.close();//关闭遮罩层
-			layer.close(index);
+			layer.close(index); 
 			if(res.code==200){
 				var _data=res.data;
 				console.log(JSON.stringify(_data));

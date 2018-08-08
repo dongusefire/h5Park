@@ -28,15 +28,13 @@
     <script src="../js/app.js" type="text/javascript" charset="utf-8"></script>
     <script src="../js/jquery-1.11.2.min.js"></script>
     <script>
-//  	function init(){
-//  		mui.init({
-//	    		beforeback:function(){
-//	    			var list = plus.webview.getWebviewById('order.html');
-//	    			mui.fire(list,'alr');
-//	    			return true;
-//	    		}
-//	    	});
-//  	}
+    	function init(){
+    		mui.init({
+	    		beforeback:function(){
+					app.addRoute('parking.html');
+	    		}
+	    	});
+    	}
     	mui.init();
     	//获取创建当前窗口的webview对象
 		var ws,token,park_lot_num,park_lot_name,noSpace,params;
@@ -48,9 +46,9 @@
 			park_lot_num = params.parking_lot_num;
 			park_lot_name = params.park_name? params.park_name:localStorage.getItem('parkingName');
 			noSpace = params.noSpace;
-//			if(noSpace=='haveNo'){
-//				init();
-//			}
+			if(noSpace=='haveNo'){
+				init();
+			}
 	    	$('.mui-title').html(park_lot_name);
 	    	getData();
     	});

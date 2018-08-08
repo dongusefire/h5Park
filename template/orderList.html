@@ -438,20 +438,6 @@
 					//获取订单编号和停车场编号
 					var order_num = $(this).parents('.order-nav').attr('data-onum'),park_id = $(this).parents('.order-nav').attr('data-pid');
 					if(park_id&&park_id!=''){
-//						mui.openWindow({
-//							url:'OrderDetails.html',
-//							id:'orderDetails',
-//							styles:{
-//								popGesture: "close",
-//								statusbar:{
-//									background:"#fff" 
-//								}
-//							},
-//							extras:{
-//								order_num:order_num,
-//								park_id:park_id
-//							}
-//						})
 						window.location.href = "OrderDetails.html?order_num="+order_num+"&park_id="+park_id;
 					}else{
 						mui.alert('订单id不存在，无法查看订单详情',app.name+'提示','确定',null)
@@ -499,13 +485,12 @@
 					mui.openWindow("cancelOrder.html","cancelOrder.html",options);
 				});
 				//调用导航
-//				mui('#trans-box').on('tap','.order-nav .goRoute',function(e){
-//					var data_carrier = $(this).parents('.order-state');
-//					var address = data_carrier.attr('data-address'),lat = data_carrier.attr('data-lat'),lng = data_carrier.attr('data-lng');
-//					localStorage.setItem('parking_lot_address',address);
-//					plus.webview.getWebviewById('template/home.html').evalJS('home.createRoute('+lng+','+lat+')');
-//					e.stopPropagation();
-//				})
+				mui('#trans-box').on('tap','.order-nav .goRoute',function(e){
+					var data_carrier = $(this).parents('.order-state');
+					var address = data_carrier.attr('data-address'),lat = data_carrier.attr('data-lat'),lng = data_carrier.attr('data-lng');
+					app.goRoute(lng,lat,address);
+					e.stopPropagation();
+				})
 				//跳转到交易详情页
 				mui('#trans-box').on('tap','.hash',function(){
 					var hash = $(this).attr('data-hash');
