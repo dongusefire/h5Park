@@ -2,13 +2,21 @@ mui.init();
 var token,ws;
 var mask = mui.createMask();
 var html_="";
+var index;
 function readData(){
 	mui.ajax(AJAX_PATH+'/profit/price?token='+token,{
 		type:'get',
 		dataType:'json',
 		data:{},
+		beforeSend:function(){
+			index = layer.msg('正在加载，请稍候...',{
+				time:10000
+			});
+			mask.show();//显示遮罩
+		},
 		success:function(res){
 			mask.close();//关闭遮罩层
+			layer.close(index);
 			if(res.code==200){
 				var _data=res.data;
 				console.log(JSON.stringify(_data));
@@ -24,7 +32,6 @@ function readData(){
 };
 window.onload = function(){
 	token = localStorage.getItem('token');
-	mask.show();//显示遮罩
 	readData();
 	$("#details").click(function(){
 		window.location.href = 'balance.html';
