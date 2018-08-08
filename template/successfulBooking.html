@@ -28,39 +28,20 @@
 	    	</div>
 	    </div>
 		<script src="../js/mui.min.js"></script>
+		<script src="../js/app.js"></script>
 		<script type="text/javascript">
-			var ws,pid,order_num;
+			var park_id,order_num,params;
 			mui.init();
-			mui.plusReady(function(){
-				ws = plus.webview.currentWebview();
-				park_id = ws.park_id;
-				order_num = ws.order_num
+			mui.ready(function(){
+				params = app.getRequest();
+				park_id = params.park_id;
+				order_num = params.order_num
 			})
 			document.getElementById('returnhome').addEventListener('tap',function(){
-				var wss = plus.webview.all();
-				var str = '';
-				for(var i=0;i<wss.length;i++){
-					str+=wss[i].id+'&';
-					if((wss[i].id.indexOf('HBuilder')==-1 && wss[i].id.indexOf('home')==-1)&&(wss[i].id.indexOf('template')==-1)){
-						wss[i].close();
-					};
-				};
+				app.addRoute('../index.html')
 			})
 			document.getElementById('seeorder').addEventListener('tap',function(){
-				mui.openWindow({
-					url:'OrderDetails.html',
-					id:'OrderDetails.html',
-					styles:{
-						popGesture: "close",
-						statusbar:{
-							background:"#fff" 
-						}
-					},
-					extras:{
-						park_id:park_id,
-						order_num:order_num
-					}
-				})
+				app.addRoute("OrderDetails.html?park_id="+park_id+"&order_num="+order_num);
 			})
 		</script>
 	</body>

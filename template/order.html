@@ -301,22 +301,9 @@
 								layer.close(index2);
 								if(res.code == 200){
 									//成功之后做的处理
-									mui.openWindow({
-										url:'successfulBooking.html',
-										id:'successfulBooking.html',
-										styles:{
-											popGesture: "close",
-											statusbar:{
-												background:"#fff" 
-											}
-										},
-										extras:{
-											order_num:res.data.order_sn,
-											park_id:res.data.park_id
-										}
-									});
 //									var home = plus.webview.getWebviewById('template/home.html');
 //									mui.fire(home,'updata');
+									app.addRoute("successfulBooking.html?order_num="+res.data.order_sn+"&park_id="+res.data.park_id)
 								}else if(res.code==509){
 									AJAXPOST(postData);
 								}else if(res.code!=502 && res.code!=503){
@@ -352,22 +339,9 @@
 								console.log('信用值低于120',JSON.stringify(res));
 								if(res.code == 200){
 									//成功之后做的处理
-									mui.openWindow({
-										url:'orderPay.html',
-										id:'orderPay.html',
-										styles:{
-											popGesture: "close",
-											statusbar:{
-												background:"#fff" 
-											}
-										},
-										extras:{
-											order_sn:res.data.order_sn,
-											park_id:res.data.park_id
-										}
-									});
 //									var home = plus.webview.getWebviewById('template/home.html');
 //									mui.fire(home,'updata');
+									app.addRoute("orderPay.html?order_sn="+res.data.order_sn+"&park_id="+res.data.park_id);
 								}else if(res.code==509){
 									ajax_order(postData);
 								}else if(res.code!=502 && res.code!=503){
