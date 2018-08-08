@@ -10,41 +10,6 @@ var orderPay = {
 	payId:'',
 	paylink:null,
 	resultOff:false,
-	getChannels:function(){//获取支付通道
-		var _this = this;
-		// 获取支付通道
-//	    plus.payment.getChannels(function(channels){
-//	    	for(var i in channels){
-//	    		var channel=channels[i];
-//				if(channel.id=='qhpay'||channel.id=='qihoo'){	// 过滤掉不支持的支付通道：暂不支持360相关支付
-//					continue;
-//				}
-//				_this.pays[channel.id] = channel;
-//				console.log(channel.id+':'+JSON.stringify(channel))
-//	    	};
-//	    },function(e){
-//	    	console.log("获取支付通道失败："+e.message);
-//	    });
-	},
-	promptInstall:function(channel){//提示安装客户端支付工具
-		var txt=null;
-		switch(channel.id){
-			case 'alipay':
-			txt='检测到系统未安装“支付宝”，无法完成支付操作，是否立即安装？';
-			break;
-			default:
-			txt='系统未安装“'+channel.description+'”服务，无法完成支付，是否立即安装？';
-			break;
-		}
-		plus.nativeUI.confirm(txt, function(status){
-			if(status.index==0){
-				channel.installService();
-			}
-		}, {
-			title:app.name+'提示',
-			buttons:['是','否']
-		});
-	},
 	payResult:function(){//查询支付状态
 		var loding = plus.nativeUI.showWaiting('正在查询支付状态',{
 			modal:true,
@@ -178,18 +143,6 @@ var orderPay = {
 			_this.payId = id;
 			_this.pay_channel = val;
 		});
-//		document.addEventListener("pause",function(){
-//			console.log(" 应用从前台切换到后台" );
-//		}, false );
-//		document.addEventListener("resume",function(){
-//			console.log(" 应用从后台切换到前台" );
-//			if(!_this.resultOff){
-//				_this.resultOff = true;
-//				setTimeout(function(){
-//					_this.payResult();
-//				},1000);
-//			};
-//		}, false );
 	},
 	orderDetail:function(){
 		var _this = this;
@@ -256,12 +209,10 @@ var orderPay = {
         return Y+M+p(D)+p(h)+p(m);
     },
 	init:function(){
-		this.ws = plus.webview.currentWebview();
-		this.wo = this.ws.opener();
-		this.order_sn = this.ws.order_sn;
-		this.park_id = this.ws.park_id;
+		var data = app.getRequest();
+		this.order_sn = data.order_sn;
+		this.park_id = data.park_id;
 		this.orderDetail();
-		this.getChannels();
 		this.bindEvent();
 	}
 }
