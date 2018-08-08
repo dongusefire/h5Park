@@ -26,38 +26,16 @@
     	</div>
     </div>
 	<script src="../js/mui.min.js"></script>
+	<script src="../js/app.js" type="text/javascript" charset="utf-8"></script>
 	<script type="text/javascript">
 		mui.init();
-		var ws;
-		mui.plusReady(function(){
-			ws = plus.webview.currentWebview();
-		})
+		var data=app.getRequest();
 		document.getElementById('returnhome').addEventListener('tap',function(){
-			var wss = plus.webview.all();
-			var str = '';
-			for(var i=0;i<wss.length;i++){
-				str+=wss[i].id+'&';
-				if((wss[i].id.indexOf('HBuilder')==-1 && wss[i].id.indexOf('home')==-1)&&(wss[i].id.indexOf('template')==-1)){
-					wss[i].close();
-				};
-			};
-		})
+			app.addRoute('/');
+		});
 		document.getElementById('seeorder').addEventListener('tap',function(){
-			mui.openWindow({
-				url:'OrderDetails.html',
-				id:'OrderDetails.html',
-				styles:{
-					popGesture: "close",
-					statusbar:{
-						background:"#fff" 
-					}
-				},
-				extras:{
-					order_num:ws.order_sn,
-					park_id:ws.park_id
-				}
-			})
-		})
+			app.addRoute('OrderDetails.html?order_num='+data.order_sn+'&park_id='+data.park_id);
+		});
 	</script>
 </body>
 </html>

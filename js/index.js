@@ -12,7 +12,7 @@ var home = {
 	markers:[],
 	activeMarker:null,
 	activeParking:-1, //当前显示的Parking
-	getUserLocation:function(){
+	getUserLocation:function(successCallback,errorCallback){
 		var _this = this;
 		this.map.plugin('AMap.Geolocation', function() {
 	        _this.geolocation = new AMap.Geolocation({
@@ -23,25 +23,9 @@ var home = {
 	        });
 	        _this.map.addControl(_this.geolocation);
 	        _this.geolocation.getCurrentPosition();
-	        _this.geolocation.watchPosition();//使用浏览器定位接口监控当前位置，移动端有效。
-	        AMap.event.addListener(_this.geolocation, 'complete',function(data){
-	        	localStorage.setItem('startpoint',data.position.getLng()+','+data.position.getLat());
-	        	_this.point={
-					lng:data.position.getLng(),
-					lat:data.position.getLat()
-				};
-				_this.getParking({
-					longitude:data.position.getLng(),
-					latitude:data.position.getLat()
-				},'');
-	        });//返回定位信息
-	        AMap.event.addListener(_this.geolocation, 'error', function(err){
-	        	console.log('定位失败信息：'+JSON.stringify(err));
-	        	_this.getParking({
-					longitude:'',
-					latitude:''
-				},'');
-	        });      //返回定位出错信息
+	        //_this.geolocation.watchPosition();//使用浏览器定位接口监控当前位置，移动端有效。
+	        AMap.event.addListener(_this.geolocation, 'complete',successCallback);//返回定位信息
+	        AMap.event.addListener(_this.geolocation, 'error', errorCallback);      //返回定位出错信息
 	    });
 	},
 	addMarker:function(){
@@ -56,7 +40,7 @@ var home = {
 		var _this = this;
 		var marker= new AMap.Marker({
             map: this.map,
-            icon: location.origin+IconSrc+'.png',
+            icon: location.origin+app.pathname+IconSrc+'.png',
             position:[lng,lat]
         });
 		marker.uuid = k; //给当前的Marker对象自定义一个属性
@@ -65,10 +49,10 @@ var home = {
 				return false;
 			};
 			//改变当前marker的图标
-			this.setIcon(location.origin+'/img/checked55.png');
+			this.setIcon(location.origin+app.pathname+'/img/checked55.png');
 			var item = _this.list[this.uuid];
 			if(_this.activeMarker!=null){//改变上一个marker的图标
-				_this.activeMarker.setIcon(location.origin+IconSrc+'.png');
+				_this.activeMarker.setIcon(location.origin+app.pathname+IconSrc+'.png');
 			};
 			_this.activeMarker = this;
 			_this.activeParking = this.uuid;
@@ -93,56 +77,6 @@ var home = {
 			h.style.display ='block';
 		});
 		this.markers.push(marker);
-	},
-	openSearch:function(){
-		var options = {
-			styles:{
-				popGesture: "close", //popGesture窗口的侧滑返回功能。可取值"none"：无侧滑返回功能；"close"：侧滑返回关闭Webview窗口；"hide"：侧滑返回隐藏webview窗口
-				statusbar:{  //statusbar窗口状态栏样式。仅在应用设置为沉浸式状态栏样式下有效，设置此属性后将自动保留系统状态栏区域不被Webview窗口占用。http://www.dcloud.io/docs/api/zh_cn/webview.html#plus.webview.WebviewStatusbarStyles
-					background:"#fff" 
-				}
-			},
-			extras:{
-				point:this.point
-			}
-		};
-		mui.openWindow('search.html','search.html',options);
-	},
-	bespeak:function(num){  //打开预定页面
-		var options = {
-			styles:{
-				popGesture: "close", //popGesture窗口的侧滑返回功能。可取值"none"：无侧滑返回功能；"close"：侧滑返回关闭Webview窗口；"hide"：侧滑返回隐藏webview窗口
-				statusbar:{  //statusbar窗口状态栏样式。仅在应用设置为沉浸式状态栏样式下有效，设置此属性后将自动保留系统状态栏区域不被Webview窗口占用。http://www.dcloud.io/docs/api/zh_cn/webview.html#plus.webview.WebviewStatusbarStyles
-					background:"#fff" 
-				}
-			},
-			extras:{
-				parking_lot_num:num
-			}
-		};
-		mui.openWindow('order.html','order.html',options);
-	},
-	openMenu:function(){
-		var _this = this;
-		mui.openWindow({
-			url:'parking.html',
-			id:'parking.html',
-			styles:{
-			    statusbar:{
-				    background:"#fff" 
-			    },
-			    top:0,
-			    left:0,
-			    position:"absolute"
-		  	},
-		  extras:{
-		  	point:{
-				longitude:_this.point.lng,
-				latitude:_this.point.lat
-			},
-		  	data:_this.list
-		  }
-		});
 	},
 	blockLatest:function(){
 		var _this= this;
@@ -209,6 +143,14 @@ var home = {
 		mui('.g-content').on('tap','#list',function(){
 			app.addRoute('parking.html');
 		});
+		mui('.g-content').on('tap','#location',function(){
+			_this.getUserLocation(function(data){
+	        	localStorage.setItem('startpoint',data.position.getLng()+','+data.position.getLat());
+			},function(err){
+				mui.toast('未获取到您的地理位置')
+	        	console.log('定位失败信息：'+JSON.stringify(err));
+	        });
+		});
 		mui('.g-content').on('tap','.parking',function(){
 			var id = this.id;
 			app.addRoute('order.html?parking_lot_num='+id);
@@ -220,8 +162,25 @@ var home = {
 		});
 	},
 	init:function(){
+		var _this = this;
 		this.CreateMap();
-		this.getUserLocation();
+		this.getUserLocation(function(data){
+        	localStorage.setItem('startpoint',data.position.getLng()+','+data.position.getLat());
+        	_this.point={
+				lng:data.position.getLng(),
+				lat:data.position.getLat()
+			};
+			_this.getParking({
+				longitude:data.position.getLng(),
+				latitude:data.position.getLat()
+			});
+		},function(err){
+        	console.log('定位失败信息：'+JSON.stringify(err));
+        	_this.getParking({
+				longitude:'',
+				latitude:''
+			},'');
+        });
 		this.blockLatest();
 		this.bindEvent();
 	}

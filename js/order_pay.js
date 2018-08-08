@@ -11,9 +11,10 @@ var orderPay = {
 	paylink:null,
 	resultOff:false,
 	payResult:function(){//查询支付状态
-		var loding = plus.nativeUI.showWaiting('正在查询支付状态',{
-			modal:true,
-			padlock:true
+		var loding = layer.open({
+		    type: 2
+		    ,content: '加载中'
+		    ,shadeClose: false
 		});
 		var token = localStorage.getItem('token');
 		var _this = this;
@@ -24,24 +25,11 @@ var orderPay = {
 			dataType:'json',
 			type:'get',
 			success:function(res,textStatus,xhr){
-				loding.close();
+				layer.close(loding);
 				_this.resultOff = false;
 				if(res.code==200){
 					//支付成功之后的回调
-					mui.openWindow({
-						url:'paySuccess.html',
-						id:'paySuccess.html',
-						styles:{
-							popGesture: "close",
-							statusbar:{
-								background:"#fff" 
-							}
-						},
-						extras:{
-							order_sn:_this.order_sn,
-							park_id:_this.park_id
-						}
-					});
+					app.addRoute('paySuccess.html?order_sn='+_this.order_sn+'&park_id='+_this.park_id);
 				}else if(res.code==509){
 					_this.payResult();
 				}else if(res.code!=502 && res.code!=503){
@@ -68,50 +56,7 @@ var orderPay = {
 					if(_this.pay_channel==1){
 						_text = '支付宝支付'
 					};
-//					plus.runtime.openURL(res.data['mweb_url']);
-					_this.paylink = mui.openWindow(res.data['mweb_url'],'paylink',{
-						styles:{
-							titleNView:{
-								buttons:[
-									{
-										color:'#292929',
-										colorPressed:'#292929',
-										float:'left',
-										text:'关闭',
-										fontSize:'16px',
-										onclick:function(){
-											_this.paylink.close();
-										}
-									}
-								],
-								backgroundColor:'#f7f7f7',
-								titleText:_text,
-								splitLine: {
-									color: '#cccccc'
-								}
-							},
-							popGesture:'none',
-							backButtonAutoControl:'none',
-							additionalHttpHeaders:{
-								"Referer":"http://www.ecosysnet.com/"
-							}
-						},
-						show:{
-							event:'loaded'
-						},
-						waiting:{
-							autoShow:false
-						},
-						extras:{}
-					});
-					_this.paylink.onclose = function(){
-						_this.payResult();
-					}
-//					plus.payment.request(_this.pays[_this.payId],order,function(result){
-//						mui.alert('支付成功',"20180711114835598",'确定',null);
-//					},function(e){
-//						mui.alert('['+e.code+']：'+e.message,"20180711114835598",'确定',null);
-//					});
+					mui('#payView')[0].src = res.data['mweb_url'];
 				}else if(res.code==509){
 					_this.getPayInfo();
 				}else if(res.code!=502 && res.code!=503){
@@ -133,8 +78,6 @@ var orderPay = {
 			};
 		});
 		mui('.mui-content').on('tap','.radio_inline',function(){
-			//如果支付通道不需要依赖系统安装服务，则永远返回true。例如支付宝，如果设备上未安装支付宝客户端则调用Wap页面进行支付，因此值固定返回true；
-			//而微信支付则依赖微信客户端，如果设备上未安装微信客户端则serviceReady值为false，此时应该提示用户安装微信客户端才能进行支付操作
 			var val = $(this).find('.pay-type').val();
 			var id = 'alipay';
 			if(val==2){
@@ -207,7 +150,7 @@ var orderPay = {
         m = date.getMinutes();
         s = date.getSeconds();
         return Y+M+p(D)+p(h)+p(m);
-    },
+   },
 	init:function(){
 		var data = app.getRequest();
 		this.order_sn = data.order_sn;
@@ -216,6 +159,4 @@ var orderPay = {
 		this.bindEvent();
 	}
 }
-mui.plusReady(function(){
-	orderPay.init();
-});
+orderPay.init();
